@@ -1,7 +1,9 @@
 export default function Singup() {
   return (
-    <main className="flex justify-center items-center h-[calc(100vh-100px)] overflow-auto dark:bg-gray-900 dark:text-white">
-      <h1 className="text-6xl">Sign Up...</h1>
+    <main className="flex flex-col  h-screen">
+      <div className="flex flex-1 justify-center items-center bg-slate-900 text-white">
+        <h1 className="text-6xl">Sign Up...</h1>
+      </div>
     </main>
   );
 }

@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link href="/" className="flex items-center">
+        <Link href="/learn" className="flex items-center">
           <Image
             src="/images/logo.svg"
             alt="Flowbite Logo"
@@ -32,17 +32,24 @@ const Navbar = () => {
           <button
             data-dropdown-toggle="language-dropdown-menu"
             type="button"
-            className="inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+            className="inline-flex items-center font-medium justify-center pr-4 pl-1 py-1 text-sm text-gray-900 dark:text-white rounded-3xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900 dark:bg-gray-800 dark:hover:text-white"
             onClick={toggleDropdown}
           >
             <Image
               src="/images/flags/us.svg"
               alt="Flag Icon"
-              className="w-5 h-5 mr-2 rounded-full"
+              className="mr-2 rounded-full hover:scale-105"
+              width={32}
+              height={32}
+            />
+            <Image
+              src={"images/dropdown-arrow.svg"}
+              alt="toggle"
               width={20}
               height={20}
+              className="hover:rotate-180"
             />
-            English
+            {/* English */}
           </button>
 
           <DropdownMenu isOpen={isDropdownOpen} />
