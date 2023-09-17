@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function Card() {
+export default function Card({ id }: { id: number }) {
   return (
     <Link
-      href={"/reader/id:123"}
+      href={`/reader/Card_${id}`}
       className="flex flex-col items-center h-72 rounded-2xl text-white bg-neutral-950 hover:scale-105 hover:bg-neutral-900 group"
     >
       {/* Card Image */}
@@ -25,7 +25,7 @@ export default function Card() {
       {/* Card Info */}
       <div className="flex-1 flex flex-col p-4 justify-between ">
         <div>
-          <h1 className="font-bold text-2xl">Hello World</h1>
+          <h1 className="font-bold text-2xl">Card Title {id}</h1>
           <p className="text-sm">Description... [20]</p>
         </div>
 
