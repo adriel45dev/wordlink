@@ -6,6 +6,7 @@ export default function Learn() {
     <>
       <h1 className="text-4xl my-6 font-bold text-white">Library</h1>
 
+      {/* Mini Stories */}
       <LibrarySection title="Mini Stories">
         <Card id={0} />
         <Card id={1} />
@@ -18,6 +19,7 @@ export default function Learn() {
         <Card id={8} />
         <Card id={9} />
         <Card id={10} />
+        <Card id={11} />
       </LibrarySection>
 
       {/* Continue Studying */}

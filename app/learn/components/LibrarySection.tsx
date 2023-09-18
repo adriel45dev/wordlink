@@ -46,11 +46,11 @@ export default function LibrarySection({
           <button className="text-gray-400 text-xs ">View All</button>
         </div>
         {/* CARDS MOBILE */}
-        <div className="md:hidden grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 ">
+        <div className="md:hidden grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 duration-700 ease-in-out">
           {Children.toArray(children)[index]}
         </div>
         {/* CARDS LG DEVICES */}
-        <div className="hidden md:grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 ">
+        <div className="hidden md:grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 duration-700 ease-in-out">
           {Children.toArray(children).slice(startIndex, endIndex)}
         </div>
       </div>
