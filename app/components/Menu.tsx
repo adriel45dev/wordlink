@@ -15,7 +15,7 @@ export default function Menu({ isOpen }: Props) {
       <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-gray-950 md:bg-gray-950 border-gray-700">
         <li>
           <Link
-            href="#library"
+            href="/learn"
             className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
             aria-current="page"
           >
