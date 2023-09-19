@@ -40,6 +40,25 @@ type TWord = {
 
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);
+  const [linkState, setLinkState] = useState<{ [key: string]: EWordState }>({});
+
+  const getState = () => {
+    const dataJSON = localStorage.getItem("state_english");
+    if (dataJSON) {
+      setLinkState(JSON.parse(dataJSON));
+    }
+  };
+
+  const postState = (word: string, state: EWordState) => {
+    const wordLow = word.toLowerCase();
+
+    if (!linkState[wordLow]) {
+      setLinkState((prev) => ({
+        ...prev,
+        [wordLow]: state,
+      }));
+    }
+  };
 
   const splitFormater = (str: string) => {
     return str
@@ -61,6 +80,12 @@ export default function Reader({ params }: { params: { slug: string } }) {
         type: EWordType.TEXT,
       };
 
+      const wordLow = word.toLowerCase();
+
+      if (linkState[wordLow]) {
+        data.state = linkState[wordLow];
+      }
+
       if (word.match(RegSymbols)) data.type = EWordType.PUNCTUATION;
       if (word.match(RegNumbers)) data.type = EWordType.NUMBER;
 
@@ -68,33 +93,35 @@ export default function Reader({ params }: { params: { slug: string } }) {
     });
 
     const wordMap: { [key: string]: number } = {};
+    // [ipsum] : 1
 
     mappedWords.forEach((obj) => {
-      if (!wordMap[obj.word]) {
-        wordMap[obj.word] = obj.id;
+      const word = obj.word.toLowerCase();
+
+      if (!wordMap[word]) {
+        wordMap[word] = obj.id;
       } else {
-        obj.id = wordMap[obj.word];
+        obj.id = wordMap[word];
       }
     });
 
     return mappedWords;
   };
 
+  const handleWord = (id: number, word: string, state: EWordState) => {
+    postState(word, EWordState.LINK);
+  };
+
   useEffect(() => {
-    setData(mapWords(text));
+    getState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleWord = (id: number) => {
-    setData((prevData) =>
-      prevData.map((w, i) => {
-        if (w.id == id) return { ...w, state: EWordState.LINK };
-        return w;
-      })
-    );
-  };
-
-  console.log("Window render");
+  useEffect(() => {
+    localStorage.setItem("state_english", JSON.stringify(linkState));
+    setData(mapWords(text));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [linkState]);
 
   return (
     <div className="flex-1 flex flex-col  items-center px-16 py-6">
@@ -127,7 +154,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
               id={`word_${text.id}`}
               className={`rounded-xl p-1 ${EWordStateActive[text.state]}`}
               data-type={text.type}
-              onClick={() => handleWord(text.id)}
+              onClick={() => handleWord(text.id, text.word, text.state)}
             >
               {text.word}{" "}
             </span>
@@ -138,7 +165,15 @@ export default function Reader({ params }: { params: { slug: string } }) {
           )
         )}
       </p>
-      i
+      <div className="flex flex-row justify-center items-center w-full m-8">
+        <button
+          type="button"
+          className=" bg-white border focus:outline-none focus:ring-4 font-medium rounded-full text-sm px-5 py-2.5 mt-8 mb-2 dark:bg-gray-800 text-white border-gray-600 hover:bg-gray-700 hover:border-gray-600 focus:ring-gray-700"
+          onClick={() => setLinkState({})}
+        >
+          Clear
+        </button>
+      </div>
     </div>
   );
 }
