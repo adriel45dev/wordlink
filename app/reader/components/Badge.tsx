@@ -1,39 +1,39 @@
 import React from "react";
 
 type TBadgeProps = {
-  badge: EBadges;
+  state: EWordState;
   count: number;
 };
 
-enum EBadges {
+enum EWordState {
   NEW = "NEW",
   LINK = "LINK",
   KNOWN = "KNOWN",
   UNIQUE = "UNIQUE",
 }
 
-enum EBadgesType {
+enum EWordStateBadge {
   NEW = "badge-new",
   LINK = "badge-link",
   KNOWN = "badge-known",
   UNIQUE = "badge-unique",
 }
 
-enum EBadgeCount {
+enum EWordStateBadgeCount {
   NEW = "badge-new-count",
   LINK = "badge-link-count",
   KNOWN = "badge-known-count",
   UNIQUE = "badge-unique-count",
 }
 
-export default function Badge({ badge, count }: TBadgeProps) {
+export default function Badge({ state, count }: TBadgeProps) {
   return (
     <div
-      className={`${EBadgesType[badge]} inline-flex items-center px-3 py-1 text-sm font-medium text-center text-whiterounded-lg rounded-2xl focus:ring-4 focus:outline-none text-white`}
+      className={`${EWordStateBadge[state]} inline-flex items-center px-3 py-1 text-sm font-medium text-center text-whiterounded-lg rounded-2xl focus:ring-4 focus:outline-none text-white`}
     >
-      {badge.toLowerCase()}
+      {state.toLowerCase()}
       <span
-        className={`${EBadgeCount[badge]} inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold rounded-full`}
+        className={`${EWordStateBadgeCount[state]} inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold rounded-full`}
       >
         {count}
       </span>

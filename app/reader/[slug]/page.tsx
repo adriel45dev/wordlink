@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Badge from "../components/Badge";
 import {
   RegSymbols,
@@ -7,14 +7,24 @@ import {
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
-import { spawn } from "child_process";
+import { text } from "@/app/config";
 
-enum EBadges {
+text;
+
+enum EWordState {
   NEW = "NEW",
   LINK = "LINK",
   KNOWN = "KNOWN",
   UNIQUE = "UNIQUE",
 }
+
+enum EWordStateActive {
+  NEW = "bg-blue-600 hover:bg-blue-400",
+  LINK = "bg-yellow-600 hover:bg-yellow-400",
+  KNOWN = "bg-green-600 hover:bg-green-400",
+  UNIQUE = "bg-gray-600 hover:bg-gray-400",
+}
+
 enum EWordType {
   NUMBER = "number",
   TEXT = "text",
@@ -23,13 +33,13 @@ enum EWordType {
 
 type TWord = {
   word: string;
-  status: EBadges;
+  state: EWordState;
   id: number;
   type: EWordType;
 };
 
 export default function Reader({ params }: { params: { slug: string } }) {
-  const text = `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reprehenderit, ab. Ea enim doloremque iste sunt cupiditate autem tenetur, eum rem placeat incidunt magnam dicta quas a eaque consequatur est. Quas cupiditate velit enim, quae saepe placeat nulla culpa nam aperiam, quam repudiandae dolorum modi vel pariatur quis nihil numquam doloremque corrupti. Dolores doloremque ut corporis sequi et aliquam iste minima repellendus natus beatae, eaque voluptatem commodi, obcaecati voluptates saepe similique perspiciatis possimus corrupti! Vitae nisi similique, explicabo autem suscipit minus numquam eligendi eaque et molestiae repudiandae cum harum modi illo quisquam maxime, dignissimos debitis, expedita quasi? Cumque expedita odit provident repudiandae voluptatibus totam porro quod architecto! Quo odio debitis enim molestiae. Atque, ut optio error autem excepturi maiores obcaecati a dignissimos tenetur rem mollitia, qui exercitationem harum ad voluptas alias maxime laborum et illo delectus laboriosam reprehenderit! Deserunt nostrum eos odit voluptatum rerum itaque harum quos temporibus quis quia a unde officia quaerat, necessitatibus id. Consequuntur dignissimos cumque odit vero minus fugiat tempora deleniti sapiente, nobis, atque qui. Ex dicta quae soluta similique laboriosam ab provident animi dolor, veniam voluptas magni quam ea facilis quo blanditiis eum iusto commodi autem dolorum magnam rem aut deserunt vitae! Eius deserunt blanditiis voluptates? 1997`;
+  const [data, setData] = useState<TWord[]>([]);
 
   const splitFormater = (str: string) => {
     return str
@@ -46,7 +56,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     const mappedWords: TWord[] = words.map((word, index) => {
       const data = {
         word,
-        status: EBadges.NEW,
+        state: EWordState.NEW,
         id: index + 1,
         type: EWordType.TEXT,
       };
@@ -70,18 +80,21 @@ export default function Reader({ params }: { params: { slug: string } }) {
     return mappedWords;
   };
 
-  const data = mapWords(text);
+  useEffect(() => {
+    setData(mapWords(text));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleWord = (id: number) => {
-    console.log(id);
-
-    document.querySelectorAll(`#word_${id}`).forEach((w) => {
-      w.classList.toggle("bg-blue-600");
-      w.classList.toggle("hover:bg-blue-400");
-      w.classList.toggle("bg-yellow-600");
-      w.classList.toggle("hover:bg-yellow-500");
-    });
+    setData((prevData) =>
+      prevData.map((w, i) => {
+        if (w.id == id) return { ...w, state: EWordState.LINK };
+        return w;
+      })
+    );
   };
+
+  console.log("Window render");
 
   return (
     <div className="flex-1 flex flex-col  items-center px-16 py-6">
@@ -89,10 +102,10 @@ export default function Reader({ params }: { params: { slug: string } }) {
         {params.slug.replace("_", " ")}
       </h1>
       <div className="flex flex-row gap-2 my-4">
-        <Badge badge={EBadges.NEW} count={3} />
-        <Badge badge={EBadges.LINK} count={4} />
-        <Badge badge={EBadges.KNOWN} count={5} />
-        <Badge badge={EBadges.UNIQUE} count={6} />
+        <Badge state={EWordState.NEW} count={3} />
+        <Badge state={EWordState.LINK} count={4} />
+        <Badge state={EWordState.KNOWN} count={5} />
+        <Badge state={EWordState.UNIQUE} count={6} />
       </div>
       <p className="text-white text-normal flex flex-row flex-wrap gap-x-2 gap-y-1 mt-8">
         {data.map((text, key) =>
@@ -100,7 +113,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
             <span
               key={key}
               id={`word_${text.id}`}
-              className="bg-blue-600 rounded-xl p-1 hover:bg-blue-400"
+              className={`rounded-xl p-1 ${EWordStateActive[text.state]}`}
               data-type={text.type}
               onClick={() => handleWord(text.id)}
             >
