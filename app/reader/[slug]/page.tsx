@@ -31,11 +31,17 @@ enum EWordType {
   PUNCTUATION = "punctuation",
 }
 
+enum EWordRelation {
+  ANCHOR,
+  SIBLING,
+}
+
 type TWord = {
   word: string;
   state: EWordState;
   id: number;
   type: EWordType;
+  relation: EWordRelation;
 };
 
 export default function Reader({ params }: { params: { slug: string } }) {
@@ -78,6 +84,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
         state: EWordState.NEW,
         id: index + 1,
         type: EWordType.TEXT,
+        relation: EWordRelation.SIBLING,
       };
 
       const wordLow = word.toLowerCase();
@@ -100,6 +107,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
       if (!wordMap[word]) {
         wordMap[word] = obj.id;
+        obj.relation = EWordRelation.ANCHOR;
       } else {
         obj.id = wordMap[word];
       }
@@ -124,18 +132,33 @@ export default function Reader({ params }: { params: { slug: string } }) {
   }, [linkState]);
 
   return (
-    <div className="flex-1 flex flex-col  items-center px-16 py-6">
-      <h1 className="font-extrabold text-4xl text-white my-3">
+    <div className="flex-1 flex flex-col items-center px-16 py-6">
+      <h1 className="font-extrabold text-4xl text-white my-3 text-center">
         {params.slug.replace("_", " ")}
       </h1>
+      <h2 className="font-normal text-2xl text-white text-center">
+        Unlocking the World through Language
+      </h2>
       <div className="flex flex-row gap-2 my-4">
         <Badge
           state={EWordState.NEW}
-          count={data.filter((data) => data.state == EWordState.NEW).length}
+          count={
+            data.filter(
+              (data) =>
+                data.state == EWordState.NEW &&
+                data.relation == EWordRelation.ANCHOR
+            ).length
+          }
         />
         <Badge
           state={EWordState.LINK}
-          count={data.filter((data) => data.state == EWordState.LINK).length}
+          count={
+            data.filter(
+              (data) =>
+                data.state == EWordState.LINK &&
+                data.relation == EWordRelation.ANCHOR
+            ).length
+          }
         />
         <Badge
           state={EWordState.KNOWN}
@@ -143,7 +166,9 @@ export default function Reader({ params }: { params: { slug: string } }) {
         />
         <Badge
           state={EWordState.UNIQUE}
-          count={data.filter((data) => data.state == EWordState.UNIQUE).length}
+          count={
+            data.filter((data) => data.relation == EWordRelation.ANCHOR).length
+          }
         />
       </div>
       <p className="text-white text-normal flex flex-row flex-wrap gap-x-2 gap-y-1 mt-8 px-8">
