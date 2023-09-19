@@ -102,12 +102,24 @@ export default function Reader({ params }: { params: { slug: string } }) {
         {params.slug.replace("_", " ")}
       </h1>
       <div className="flex flex-row gap-2 my-4">
-        <Badge state={EWordState.NEW} count={3} />
-        <Badge state={EWordState.LINK} count={4} />
-        <Badge state={EWordState.KNOWN} count={5} />
-        <Badge state={EWordState.UNIQUE} count={6} />
+        <Badge
+          state={EWordState.NEW}
+          count={data.filter((data) => data.state == EWordState.NEW).length}
+        />
+        <Badge
+          state={EWordState.LINK}
+          count={data.filter((data) => data.state == EWordState.LINK).length}
+        />
+        <Badge
+          state={EWordState.KNOWN}
+          count={data.filter((data) => data.state == EWordState.KNOWN).length}
+        />
+        <Badge
+          state={EWordState.UNIQUE}
+          count={data.filter((data) => data.state == EWordState.UNIQUE).length}
+        />
       </div>
-      <p className="text-white text-normal flex flex-row flex-wrap gap-x-2 gap-y-1 mt-8">
+      <p className="text-white text-normal flex flex-row flex-wrap gap-x-2 gap-y-1 mt-8 px-8">
         {data.map((text, key) =>
           text.type == EWordType.TEXT ? (
             <span

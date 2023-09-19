@@ -33,7 +33,7 @@ export default function Badge({ state, count }: TBadgeProps) {
     >
       {state.toLowerCase()}
       <span
-        className={`${EWordStateBadgeCount[state]} inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold rounded-full`}
+        className={`${EWordStateBadgeCount[state]} inline-flex items-center justify-center w-8 h-8 ml-2 text-xs font-semibold rounded-full`}
       >
         {count}
       </span>
