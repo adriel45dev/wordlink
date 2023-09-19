@@ -75,9 +75,12 @@ export default function Reader({ params }: { params: { slug: string } }) {
   const handleWord = (id: number) => {
     console.log(id);
 
-    document
-      .querySelectorAll(`#word_${id}`)
-      .forEach((w) => w.classList.toggle("bg-yellow-600"));
+    document.querySelectorAll(`#word_${id}`).forEach((w) => {
+      w.classList.toggle("bg-blue-600");
+      w.classList.toggle("hover:bg-blue-400");
+      w.classList.toggle("bg-yellow-600");
+      w.classList.toggle("hover:bg-yellow-500");
+    });
   };
 
   return (
