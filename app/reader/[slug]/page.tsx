@@ -266,7 +266,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.IGNORE)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-red-500"
+                            className={`${
+                              text.state == EWordStateLink.IGNORE
+                                ? "bg-red-500"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-red-500`}
                           >
                             <TrashIcon className="h-6 w-6" />
                           </button>
@@ -277,7 +281,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.LINK)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                            className={`${
+                              text.state == EWordStateLink.LINK
+                                ? "bg-yellow-600"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
                           >
                             1
                           </button>
@@ -288,7 +296,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.RECOGNIZED)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                            className={`${
+                              text.state == EWordStateLink.RECOGNIZED
+                                ? "bg-orange-500"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
                           >
                             2
                           </button>
@@ -301,7 +313,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.FAMILIAR)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                            className={`${
+                              text.state == EWordStateLink.FAMILIAR
+                                ? "bg-lime-600"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
                           >
                             3
                           </button>
@@ -314,7 +330,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.LEARNED)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                            className={`${
+                              text.state == EWordStateLink.LEARNED
+                                ? "bg-green-700"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
                           >
                             4
                           </button>
@@ -325,7 +345,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             onClick={() =>
                               updateState(text.word, EWordStateLink.KNOWN)
                             }
-                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-green-500"
+                            className={`${
+                              text.state == EWordStateLink.KNOWN
+                                ? "bg-green-500"
+                                : "bg-slate-700"
+                            } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-green-500`}
                           >
                             <CheckIcon className="h-10 w-10 " />
                           </button>
