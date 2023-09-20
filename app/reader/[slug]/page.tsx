@@ -143,12 +143,15 @@ export default function Reader({ params }: { params: { slug: string } }) {
   return (
     <section className="flex flex-1 flex-col md:flex-row">
       <div className="flex w-full flex-1 flex-col items-center py-6">
+        {/* HEADING CARD  */}
         <h1 className="my-3 text-center text-4xl font-extrabold text-white">
           {params.slug.replace("_", " ")}
         </h1>
         <h2 className="text-center text-2xl font-normal text-white">
           Unlocking the World through Language
         </h2>
+
+        {/* BADGES COUNT */}
         <div className="my-4 grid w-full grid-cols-2 place-items-center items-center justify-center gap-2 px-4 md:flex">
           <Badge
             state={EWordState.NEW}
@@ -183,6 +186,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
           />
         </div>
 
+        {/* BOARD  */}
         <div className="text-normal mt-4 flex w-full flex-wrap justify-stretch gap-x-2 gap-y-1 px-4 py-4 text-white md:mt-8 md:px-24">
           {data.map((text, key) =>
             text.type == EWordType.TEXT ? (
@@ -197,6 +201,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                     {text.word}
                   </span>
                 </div>
+
                 {/* ACTIVE LINK CARD */}
                 {activeLink?.index == key && (
                   <div className="my-2 block w-full rounded-2xl ">
@@ -245,6 +250,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
           )}
         </div>
 
+        {/* CLEAR BUTTON */}
         <div className="m-8 flex w-full flex-row items-center justify-center">
           <button
             type="button"
