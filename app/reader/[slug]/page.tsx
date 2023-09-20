@@ -255,45 +255,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
           </button>
         </div>
       </div>
-
-      {/* {activeLink && (
-        <div className="mb-8 flex min-h-full w-full flex-col items-center px-6 py-6 md:mb-0 md:w-96">
-          <div className="relative flex w-full flex-col rounded-2xl border border-slate-700 px-4">
-            <button
-              className="absolute right-0 mx-4 my-2 flex items-center justify-center text-white"
-              onClick={() => setActiveLink("")}
-            >
-              <CloseIcon className="h-8 w-8 hover:text-blue-500" />
-            </button>
-            <h2 className="py-4 text-center text-2xl font-bold text-white">
-              {activeLink}
-            </h2>
-
-            <div className="flex w-full flex-col justify-center px-8 text-sm text-gray-300">
-              <div className="text-white">1. Lorem, ipsum.</div>
-              <div className="text-white">2. Dolor sit amet.</div>
-            </div>
-
-            <div className="my-2 flex w-full flex-row items-center justify-center gap-2 py-2">
-              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                1
-              </button>
-              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                2
-              </button>
-              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                3
-              </button>
-              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                4
-              </button>
-              <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                5
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </section>
   );
 }
