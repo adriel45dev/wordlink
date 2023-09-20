@@ -29,11 +29,12 @@ enum EWordStateBadgeCount {
 export default function Badge({ state, count }: TBadgeProps) {
   return (
     <div
-      className={`${EWordStateBadge[state]} inline-flex items-center px-3 py-1 text-sm font-medium text-center text-whiterounded-lg rounded-2xl focus:ring-4 focus:outline-none text-white`}
+      className={`${EWordStateBadge[state]} text-whiterounded-lg flex w-full  items-center justify-between rounded-2xl px-6  py-1 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 md:w-auto`}
     >
       {state.toLowerCase()}
+
       <span
-        className={`${EWordStateBadgeCount[state]} inline-flex items-center justify-center w-8 h-8 ml-2 text-xs font-semibold rounded-full`}
+        className={`${EWordStateBadgeCount[state]} ml-2 flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold`}
       >
         {count}
       </span>
