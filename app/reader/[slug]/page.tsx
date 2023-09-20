@@ -10,6 +10,8 @@ import {
 import { text } from "@/app/config";
 import CloseIcon from "@/public/icons/CloseIcon";
 import { log } from "console";
+import CheckIcon from "@/public/icons/CheckIcon";
+import TrashIcon from "@/public/icons/TrashIcon";
 
 enum EWordState {
   NEW = "NEW",
@@ -152,8 +154,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
     return mappedWords;
   };
 
-  console.log(linkState);
-
   const handleWord = (
     id: number,
     word: string,
@@ -268,7 +268,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             }
                             className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-red-500"
                           >
-                            I
+                            <TrashIcon className="h-6 w-6" />
                           </button>
                           <span className="text-xs text-gray-400">Ignore</span>
                         </div>
@@ -327,7 +327,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                             }
                             className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-green-500"
                           >
-                            OK
+                            <CheckIcon className="h-10 w-10 " />
                           </button>
                           <span className="text-xs text-gray-400">Known</span>
                         </div>
