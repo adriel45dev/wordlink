@@ -9,6 +9,7 @@ import {
 } from "@/app/shared/Regex";
 import { text } from "@/app/config";
 import CloseIcon from "@/public/icons/CloseIcon";
+import { log } from "console";
 
 enum EWordState {
   NEW = "NEW",
@@ -24,6 +25,26 @@ enum EWordStateActive {
   UNIQUE = "bg-gray-600 hover:bg-gray-400",
 }
 
+enum EWordStateLink {
+  IGNORE = "IGNORE",
+  NEW = "NEW",
+  LINK = "LINK",
+  RECOGNIZED = "RECOGNIZED",
+  FAMILIAR = "FAMILIAR",
+  LEARNED = "LEARNED",
+  KNOWN = "KNOWN",
+}
+
+enum EWordStateLinkActive {
+  IGNORE = "",
+  NEW = "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-800 ",
+  LINK = "bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none  focus:ring-yellow-800 ",
+  RECOGNIZED = "bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none  focus:ring-orange-800",
+  FAMILIAR = "bg-opacity-90 bg-gradient-to-r from-lime-500 via-lime-600 to-lime-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none  focus:ring-lime-800 shadow-lg shadow-lime-800/80",
+  LEARNED = "bg-slate-800 hover:bg-slate-900 bg-opacity-85",
+  KNOWN = "",
+}
+
 enum EWordType {
   NUMBER = "number",
   TEXT = "text",
@@ -37,7 +58,7 @@ enum EWordRelation {
 
 type TWord = {
   word: string;
-  state: EWordState;
+  state: EWordStateLink;
   id: number;
   type: EWordType;
   relation: EWordRelation;
@@ -45,7 +66,9 @@ type TWord = {
 
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);
-  const [linkState, setLinkState] = useState<{ [key: string]: EWordState }>({});
+  const [linkState, setLinkState] = useState<{ [key: string]: EWordStateLink }>(
+    {},
+  );
   const [activeLink, setActiveLink] = useState<{
     active: string;
     index: number;
@@ -58,7 +81,18 @@ export default function Reader({ params }: { params: { slug: string } }) {
     }
   };
 
-  const postState = (word: string, state: EWordState) => {
+  const updateState = (word: string, state: EWordStateLink) => {
+    const wordLow = word.toLowerCase();
+
+    if (linkState[wordLow] == state) return;
+
+    setLinkState((prev) => ({
+      ...prev,
+      [wordLow]: state,
+    }));
+  };
+
+  const postState = (word: string, state: EWordStateLink) => {
     const wordLow = word.toLowerCase();
 
     if (!linkState[wordLow]) {
@@ -68,7 +102,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
       }));
     }
   };
-
   const splitFormater = (str: string) => {
     return str
       .replace(RegSymbols, ` $& `)
@@ -84,7 +117,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     const mappedWords: TWord[] = words.map((word, index) => {
       const data = {
         word,
-        state: EWordState.NEW,
+        state: EWordStateLink.NEW,
         id: index + 1,
         type: EWordType.TEXT,
         relation: EWordRelation.SIBLING,
@@ -119,13 +152,15 @@ export default function Reader({ params }: { params: { slug: string } }) {
     return mappedWords;
   };
 
+  console.log(linkState);
+
   const handleWord = (
     id: number,
     word: string,
-    state: EWordState,
+    state: EWordStateLink,
     index: number,
   ) => {
-    postState(word, EWordState.LINK);
+    postState(word, state);
     setActiveLink({ active: word, index: index });
   };
 
@@ -158,7 +193,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
             count={
               data.filter(
                 (data) =>
-                  data.state == EWordState.NEW &&
+                  data.state == EWordStateLink.NEW &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }
@@ -168,14 +203,16 @@ export default function Reader({ params }: { params: { slug: string } }) {
             count={
               data.filter(
                 (data) =>
-                  data.state == EWordState.LINK &&
+                  data.state == EWordStateLink.LINK &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }
           />
           <Badge
             state={EWordState.KNOWN}
-            count={data.filter((data) => data.state == EWordState.KNOWN).length}
+            count={
+              data.filter((data) => data.state == EWordStateLink.KNOWN).length
+            }
           />
           <Badge
             state={EWordState.UNIQUE}
@@ -193,9 +230,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
               <Fragment key={key}>
                 <div className="flex">
                   <span
-                    className={`rounded-xl p-1 ${EWordStateActive[text.state]}`}
+                    className={`rounded-xl p-1 ${
+                      EWordStateLinkActive[text.state]
+                    }`}
                     onClick={() =>
-                      handleWord(text.id, text.word, text.state, key)
+                      handleWord(text.id, text.word, EWordStateLink.LINK, key)
                     }
                   >
                     {text.word}
@@ -222,21 +261,76 @@ export default function Reader({ params }: { params: { slug: string } }) {
                       </div>
 
                       <div className="my-2 flex w-full flex-row items-center justify-center gap-2 py-2">
-                        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                          1
-                        </button>
-                        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                          2
-                        </button>
-                        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                          3
-                        </button>
-                        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                          4
-                        </button>
-                        <button className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500">
-                          5
-                        </button>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.IGNORE)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-red-500"
+                          >
+                            I
+                          </button>
+                          <span className="text-xs text-gray-400">Ignore</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.LINK)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                          >
+                            1
+                          </button>
+                          <span className="text-xs text-gray-400">New</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.RECOGNIZED)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                          >
+                            2
+                          </button>
+                          <span className="text-xs text-gray-400">
+                            Recognized
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.FAMILIAR)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                          >
+                            3
+                          </button>
+                          <span className="text-xs text-gray-400">
+                            Familiar
+                          </span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.LEARNED)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500"
+                          >
+                            4
+                          </button>
+                          <span className="text-xs text-gray-400">Learned</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center">
+                          <button
+                            onClick={() =>
+                              updateState(text.word, EWordStateLink.KNOWN)
+                            }
+                            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-green-500"
+                          >
+                            OK
+                          </button>
+                          <span className="text-xs text-gray-400">Known</span>
+                        </div>
                       </div>
                     </div>
                   </div>
