@@ -9,25 +9,17 @@ import {
 } from "@/app/shared/Regex";
 import { text } from "@/app/config";
 import CloseIcon from "@/public/icons/CloseIcon";
-import { log } from "console";
 import CheckIcon from "@/public/icons/CheckIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
 
-enum EWordState {
+enum WordBadgeType {
   NEW = "NEW",
   LINK = "LINK",
   KNOWN = "KNOWN",
   UNIQUE = "UNIQUE",
 }
 
-enum EWordStateActive {
-  NEW = "bg-blue-600 hover:bg-blue-400",
-  LINK = "bg-yellow-600 hover:bg-yellow-400",
-  KNOWN = "bg-green-600 hover:bg-green-400",
-  UNIQUE = "bg-gray-600 hover:bg-gray-400",
-}
-
-enum EWordStateLink {
+enum WordLinkType {
   IGNORE = "IGNORE",
   NEW = "NEW",
   LINK = "LINK",
@@ -37,7 +29,7 @@ enum EWordStateLink {
   KNOWN = "KNOWN",
 }
 
-enum EWordStateLinkActive {
+enum WordLinkVisualStyle {
   IGNORE = "",
   NEW = "bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-800 ",
   LINK = "bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none  focus:ring-yellow-800 ",
@@ -60,7 +52,7 @@ enum EWordRelation {
 
 type TWord = {
   word: string;
-  state: EWordStateLink;
+  state: WordLinkType;
   id: number;
   type: EWordType;
   relation: EWordRelation;
@@ -68,7 +60,7 @@ type TWord = {
 
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);
-  const [linkState, setLinkState] = useState<{ [key: string]: EWordStateLink }>(
+  const [linkState, setLinkState] = useState<{ [key: string]: WordLinkType }>(
     {},
   );
   const [activeLink, setActiveLink] = useState<{
@@ -83,7 +75,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     }
   };
 
-  const updateState = (word: string, state: EWordStateLink) => {
+  const updateState = (word: string, state: WordLinkType) => {
     const wordLow = word.toLowerCase();
 
     if (linkState[wordLow] == state) return;
@@ -94,7 +86,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     }));
   };
 
-  const postState = (word: string, state: EWordStateLink) => {
+  const postState = (word: string, state: WordLinkType) => {
     const wordLow = word.toLowerCase();
 
     if (!linkState[wordLow]) {
@@ -119,7 +111,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     const mappedWords: TWord[] = words.map((word, index) => {
       const data = {
         word,
-        state: EWordStateLink.NEW,
+        state: WordLinkType.NEW,
         id: index + 1,
         type: EWordType.TEXT,
         relation: EWordRelation.SIBLING,
@@ -157,7 +149,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
   const handleWord = (
     id: number,
     word: string,
-    state: EWordStateLink,
+    state: WordLinkType,
     index: number,
   ) => {
     postState(word, state);
@@ -189,33 +181,33 @@ export default function Reader({ params }: { params: { slug: string } }) {
         {/* BADGES COUNT */}
         <div className="my-4 grid w-full grid-cols-2 place-items-center items-center justify-center gap-2 px-4 md:flex">
           <Badge
-            state={EWordState.NEW}
+            state={WordBadgeType.NEW}
             count={
               data.filter(
                 (data) =>
-                  data.state == EWordStateLink.NEW &&
+                  data.state == WordLinkType.NEW &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }
           />
           <Badge
-            state={EWordState.LINK}
+            state={WordBadgeType.LINK}
             count={
               data.filter(
                 (data) =>
-                  data.state == EWordStateLink.LINK &&
+                  data.state == WordLinkType.LINK &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }
           />
           <Badge
-            state={EWordState.KNOWN}
+            state={WordBadgeType.KNOWN}
             count={
-              data.filter((data) => data.state == EWordStateLink.KNOWN).length
+              data.filter((data) => data.state == WordLinkType.KNOWN).length
             }
           />
           <Badge
-            state={EWordState.UNIQUE}
+            state={WordBadgeType.UNIQUE}
             count={
               data.filter((data) => data.relation == EWordRelation.ANCHOR)
                 .length
@@ -231,10 +223,10 @@ export default function Reader({ params }: { params: { slug: string } }) {
                 <div className="flex">
                   <span
                     className={`rounded-xl p-1 ${
-                      EWordStateLinkActive[text.state]
+                      WordLinkVisualStyle[text.state]
                     }`}
                     onClick={() =>
-                      handleWord(text.id, text.word, EWordStateLink.LINK, key)
+                      handleWord(text.id, text.word, WordLinkType.LINK, key)
                     }
                   >
                     {text.word}
@@ -243,7 +235,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
                 {/* ACTIVE LINK CARD */}
                 {activeLink?.index == key && (
-                  <div className="my-2 block w-full rounded-2xl ">
+                  <div className="my-2 min-w-full flex-1 rounded-2xl">
                     <div className="relative flex w-full flex-col rounded-2xl border border-slate-700 px-4">
                       <button
                         className="absolute right-0 mx-4 my-2 flex items-center justify-center text-white"
@@ -251,26 +243,29 @@ export default function Reader({ params }: { params: { slug: string } }) {
                       >
                         <CloseIcon className="h-8 w-8 hover:text-blue-500" />
                       </button>
+
                       <h2 className="py-4 text-center text-2xl font-bold text-white">
                         {activeLink.active}
                       </h2>
 
+                      {/* DESCRIPTION */}
                       <div className="flex w-full flex-col justify-center px-8 text-sm text-gray-300">
                         <div className="text-white">1. Lorem, ipsum.</div>
                         <div className="text-white">2. Dolor sit amet.</div>
                       </div>
 
-                      <div className="my-2 flex w-full flex-row items-center justify-center gap-2 py-2">
+                      {/* BUTTON ACTIONS */}
+                      <div className="my-2 flex w-full flex-row flex-wrap items-center justify-center gap-2 py-2">
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.IGNORE)
+                              updateState(text.word, WordLinkType.IGNORE)
                             }
                             className={`${
-                              text.state == EWordStateLink.IGNORE
+                              text.state == WordLinkType.IGNORE
                                 ? "bg-red-500"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-red-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-red-500`}
                           >
                             <TrashIcon className="h-6 w-6" />
                           </button>
@@ -279,13 +274,13 @@ export default function Reader({ params }: { params: { slug: string } }) {
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.LINK)
+                              updateState(text.word, WordLinkType.LINK)
                             }
                             className={`${
-                              text.state == EWordStateLink.LINK
+                              text.state == WordLinkType.LINK
                                 ? "bg-yellow-600"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
                           >
                             1
                           </button>
@@ -294,13 +289,13 @@ export default function Reader({ params }: { params: { slug: string } }) {
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.RECOGNIZED)
+                              updateState(text.word, WordLinkType.RECOGNIZED)
                             }
                             className={`${
-                              text.state == EWordStateLink.RECOGNIZED
+                              text.state == WordLinkType.RECOGNIZED
                                 ? "bg-orange-500"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
                           >
                             2
                           </button>
@@ -311,13 +306,13 @@ export default function Reader({ params }: { params: { slug: string } }) {
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.FAMILIAR)
+                              updateState(text.word, WordLinkType.FAMILIAR)
                             }
                             className={`${
-                              text.state == EWordStateLink.FAMILIAR
+                              text.state == WordLinkType.FAMILIAR
                                 ? "bg-lime-600"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
                           >
                             3
                           </button>
@@ -328,13 +323,13 @@ export default function Reader({ params }: { params: { slug: string } }) {
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.LEARNED)
+                              updateState(text.word, WordLinkType.LEARNED)
                             }
                             className={`${
-                              text.state == EWordStateLink.LEARNED
+                              text.state == WordLinkType.LEARNED
                                 ? "bg-green-700"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full bg-slate-700 text-white hover:bg-slate-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-slate-500`}
                           >
                             4
                           </button>
@@ -343,13 +338,13 @@ export default function Reader({ params }: { params: { slug: string } }) {
                         <div className="flex flex-col items-center justify-center">
                           <button
                             onClick={() =>
-                              updateState(text.word, EWordStateLink.KNOWN)
+                              updateState(text.word, WordLinkType.KNOWN)
                             }
                             className={`${
-                              text.state == EWordStateLink.KNOWN
+                              text.state == WordLinkType.KNOWN
                                 ? "bg-green-500"
                                 : "bg-slate-700"
-                            } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-green-500`}
+                            } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-green-500`}
                           >
                             <CheckIcon className="h-10 w-10 " />
                           </button>
