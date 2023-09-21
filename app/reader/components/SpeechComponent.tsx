@@ -18,6 +18,7 @@ const SpeechComponent = ({ text }: { text: string }) => {
     const speech = window.speechSynthesis;
 
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en";
 
     utterance.addEventListener("end", () => {
       setIsPlaying(false);
