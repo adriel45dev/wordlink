@@ -39,7 +39,7 @@ export default function WordStateController({
         </h2>
 
         {/* DESCRIPTION */}
-        <div className="flex w-full flex-col justify-center px-8 text-sm text-gray-300">
+        <div className="text-normal flex w-full flex-col justify-center px-8 text-gray-300">
           {text.description.map((description, key) => (
             <div key={key} className="text-white">
               {`${key + 1}. `} {description}
