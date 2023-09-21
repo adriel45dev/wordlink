@@ -31,7 +31,7 @@ export default function InputDescription({
 
   return (
     <div className="my-3 flex w-full flex-col justify-center px-8 text-sm text-gray-300">
-      <div className="flex ">
+      <div className="flex w-full">
         <input
           type="text"
           className="block w-full min-w-0 flex-1 rounded-none rounded-l-lg border border-gray-600 bg-gray-700  p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
