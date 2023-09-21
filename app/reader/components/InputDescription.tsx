@@ -30,7 +30,7 @@ export default function InputDescription({
   };
 
   return (
-    <div className="my-3 flex w-full flex-col justify-center px-8 text-sm text-gray-300">
+    <div className="my-3 flex w-full flex-col justify-center text-sm text-gray-300">
       <div className="flex w-full">
         <input
           type="text"
