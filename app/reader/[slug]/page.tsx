@@ -178,6 +178,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                 (data) =>
                   data.state !== WordLinkType.IGNORE &&
                   data.state !== WordLinkType.NEW &&
+                  data.state !== WordLinkType.KNOWN &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }

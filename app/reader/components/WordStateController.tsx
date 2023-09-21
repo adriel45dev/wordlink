@@ -8,6 +8,7 @@ import TWord from "@/app/shared/types/word.types";
 import TActiveLink from "@/app/shared/types/active-link.types";
 import AddIcon from "@/public/icons/AddIcons";
 import InputDescription from "./InputDescription";
+import SpeechComponent from "./SpeechComponent";
 
 type WordStateControllerProps = {
   text: TWord;
@@ -34,9 +35,10 @@ export default function WordStateController({
           <CloseIcon className="h-8 w-8 hover:text-blue-500" />
         </button>
 
-        <h2 className="py-4 text-center text-2xl font-bold text-white">
-          {activeLink.active}
-        </h2>
+        <div className="flex w-full flex-row items-center justify-center gap-4 py-2">
+          <SpeechComponent text={text.word} />
+          <h2 className="text-2xl font-bold text-white">{activeLink.active}</h2>
+        </div>
 
         {/* DESCRIPTION */}
         <div className="text-normal flex w-full flex-col justify-center px-8 text-gray-300">
