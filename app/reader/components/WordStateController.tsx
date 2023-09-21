@@ -2,6 +2,7 @@ import CheckIcon from "@/public/icons/CheckIcon";
 import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
 import React from "react";
+import ButtonWordState from "./ButtonWordState";
 
 type TActiveLink = {
   active: string;
@@ -72,88 +73,61 @@ export default function WordStateController({
 
         {/* BUTTON ACTIONS */}
         <div className="my-2 flex w-full flex-row flex-wrap items-center justify-center gap-2 py-2">
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() => handleUpdateState(text.word, WordLinkType.IGNORE)}
-              className={`${
-                text.state == WordLinkType.IGNORE
-                  ? "bg-red-500"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-red-500`}
-            >
-              <TrashIcon className="h-6 w-6" />
-            </button>
-            <span className="text-xs text-gray-400">Ignore</span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() => handleUpdateState(text.word, WordLinkType.LINK)}
-              className={`${
-                text.state == WordLinkType.LINK
-                  ? "bg-yellow-600"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
-            >
-              1
-            </button>
-            <span className="text-xs text-gray-400">New</span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() =>
-                handleUpdateState(text.word, WordLinkType.RECOGNIZED)
-              }
-              className={`${
-                text.state == WordLinkType.RECOGNIZED
-                  ? "bg-orange-500"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
-            >
-              2
-            </button>
-            <span className="text-xs text-gray-400">Recognized</span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() =>
-                handleUpdateState(text.word, WordLinkType.FAMILIAR)
-              }
-              className={`${
-                text.state == WordLinkType.FAMILIAR
-                  ? "bg-lime-600"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full  text-white hover:bg-slate-500`}
-            >
-              3
-            </button>
-            <span className="text-xs text-gray-400">Familiar</span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() => handleUpdateState(text.word, WordLinkType.LEARNED)}
-              className={`${
-                text.state == WordLinkType.LEARNED
-                  ? "bg-green-700"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-slate-500`}
-            >
-              4
-            </button>
-            <span className="text-xs text-gray-400">Learned</span>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            <button
-              onClick={() => handleUpdateState(text.word, WordLinkType.KNOWN)}
-              className={`${
-                text.state == WordLinkType.KNOWN
-                  ? "bg-green-500"
-                  : "bg-slate-700"
-              } flex h-12 w-12 items-center justify-center rounded-full text-white hover:bg-green-500`}
-            >
-              <CheckIcon className="h-10 w-10 " />
-            </button>
-            <span className="text-xs text-gray-400">Known</span>
-          </div>
+          <ButtonWordState
+            label="Ignore"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.IGNORE}
+            handleUpdateState={handleUpdateState}
+          >
+            <TrashIcon className="h-6 w-6" />
+          </ButtonWordState>
+
+          <ButtonWordState
+            content="1"
+            label="New"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.LINK}
+            handleUpdateState={handleUpdateState}
+          />
+
+          <ButtonWordState
+            content="2"
+            label="Recognized"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.RECOGNIZED}
+            handleUpdateState={handleUpdateState}
+          />
+
+          <ButtonWordState
+            content="3"
+            label="Familiar"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.FAMILIAR}
+            handleUpdateState={handleUpdateState}
+          />
+
+          <ButtonWordState
+            content="4"
+            label="Learned"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.LEARNED}
+            handleUpdateState={handleUpdateState}
+          />
+
+          <ButtonWordState
+            label="Known"
+            state={text.state}
+            word={text.word}
+            type={WordLinkType.KNOWN}
+            handleUpdateState={handleUpdateState}
+          >
+            <CheckIcon className="h-10 w-10 " />
+          </ButtonWordState>
         </div>
       </div>
     </div>

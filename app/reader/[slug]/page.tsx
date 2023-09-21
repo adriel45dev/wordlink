@@ -12,6 +12,7 @@ import CloseIcon from "@/public/icons/CloseIcon";
 import CheckIcon from "@/public/icons/CheckIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
 import WordStateController from "../components/WordStateController";
+import Heading from "../components/Heading";
 
 enum WordBadgeType {
   NEW = "NEW",
@@ -147,7 +148,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     return mappedWords;
   };
 
-  const handleWord = (
+  const onWord = (
     id: number,
     word: string,
     state: WordLinkType,
@@ -172,12 +173,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     <section className="flex flex-1 flex-col md:flex-row">
       <div className="flex w-full flex-1 flex-col items-center py-6">
         {/* HEADING CARD  */}
-        <h1 className="my-3 text-center text-4xl font-extrabold text-white">
-          {params.slug.replace("_", " ")}
-        </h1>
-        <h2 className="text-center text-2xl font-normal text-white">
-          Unlocking the World through Language
-        </h2>
+        <Heading slug={params.slug} />
 
         {/* BADGES COUNT */}
         <div className="my-4 grid w-full grid-cols-2 place-items-center items-center justify-center gap-2 px-4 md:flex">
@@ -227,7 +223,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                       WordLinkVisualStyle[text.state]
                     }`}
                     onClick={() =>
-                      handleWord(text.id, text.word, WordLinkType.LINK, key)
+                      onWord(text.id, text.word, WordLinkType.LINK, key)
                     }
                   >
                     {text.word}
