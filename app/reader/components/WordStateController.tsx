@@ -1,22 +1,26 @@
 import CheckIcon from "@/public/icons/CheckIcon";
 import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
-import React from "react";
+import React, { useState } from "react";
 import ButtonWordState from "./ButtonWordState";
 import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
 import TActiveLink from "@/app/shared/types/active-link.types";
+import AddIcon from "@/public/icons/AddIcons";
+import InputDescription from "./InputDescription";
 
 type WordStateControllerProps = {
   text: TWord;
   activeLink: TActiveLink;
   handleSetActiveLink: (value: TActiveLink) => void;
   handleUpdateState: (word: string, state: WordLinkType) => void;
+  handlePostDescription: (word: string, des: string) => void;
 };
 
 export default function WordStateController({
   handleSetActiveLink,
   handleUpdateState,
+  handlePostDescription,
   activeLink,
   text,
 }: WordStateControllerProps) {
@@ -36,10 +40,18 @@ export default function WordStateController({
 
         {/* DESCRIPTION */}
         <div className="flex w-full flex-col justify-center px-8 text-sm text-gray-300">
-          <div className="text-white">1. Lorem, ipsum.</div>
-          <div className="text-white">2. Dolor sit amet.</div>
+          {text.description.map((description, key) => (
+            <div key={key} className="text-white">
+              {`${key + 1}. `} {description}
+            </div>
+          ))}
         </div>
 
+        {/* IUNPUT DESCRIPTION */}
+        <InputDescription
+          handlePostDescription={handlePostDescription}
+          word={text.word}
+        />
         {/* BUTTON ACTIONS */}
         <div className="my-2 flex w-full flex-row flex-wrap items-center justify-center gap-2 py-2">
           <ButtonWordState

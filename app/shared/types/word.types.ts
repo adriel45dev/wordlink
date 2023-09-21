@@ -8,6 +8,7 @@ type TWord = {
   state: WordLinkType;
   type: EWordType;
   relation: EWordRelation;
+  description: string[];
 };
 
 export default TWord;

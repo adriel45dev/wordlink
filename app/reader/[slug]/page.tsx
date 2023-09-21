@@ -1,7 +1,7 @@
 "use client";
+import { text } from "@/app/config";
 import React, { useEffect, useState, Fragment } from "react";
 import Badge from "../components/Badge";
-import { text } from "@/app/config";
 import WordStateController from "../components/WordStateController";
 import Heading from "../components/Heading";
 import WordBadgeType from "@/app/shared/enums/word-badge-type.enums";
@@ -9,6 +9,8 @@ import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
 import EWordRelation from "@/app/shared/enums/word-relation-type.enums";
 import EWordType from "@/app/shared/enums/word-type.enums";
+import TActiveLink from "@/app/shared/types/active-link.types";
+import TWordsListLink from "@/app/shared/types/list-words-link.types";
 import {
   RegSymbols,
   RegExtraSpaces,
@@ -28,42 +30,53 @@ enum WordLinkVisualStyle {
 
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);
-  const [linkState, setLinkState] = useState<{ [key: string]: WordLinkType }>(
-    {},
-  );
-  const [activeLink, setActiveLink] = useState<{
-    active: string;
-    index: number;
-  }>();
+  const [listWordsLink, setlistWordsLink] = useState<TWordsListLink>({});
+
+  const [activeLink, setActiveLink] = useState<TActiveLink>();
 
   const getState = () => {
     const dataJSON = localStorage.getItem("state_english");
     if (dataJSON) {
-      setLinkState(JSON.parse(dataJSON));
+      setlistWordsLink(JSON.parse(dataJSON));
     }
   };
 
   const updateState = (word: string, state: WordLinkType) => {
     const wordLow = word.toLowerCase();
 
-    if (linkState[wordLow] == state) return;
+    if (listWordsLink[wordLow].state == state) return;
 
-    setLinkState((prev) => ({
+    setlistWordsLink((prev) => ({
       ...prev,
-      [wordLow]: state,
+      [wordLow]: { ...listWordsLink[wordLow], state },
     }));
   };
 
   const postState = (word: string, state: WordLinkType) => {
     const wordLow = word.toLowerCase();
 
-    if (!linkState[wordLow]) {
-      setLinkState((prev) => ({
+    if (!listWordsLink[wordLow]) {
+      setlistWordsLink((prev) => ({
         ...prev,
-        [wordLow]: state,
+        [wordLow]: { des: [], state },
       }));
     }
   };
+
+  const postDescription = (word: string, des: string) => {
+    if (!des) return;
+    const wordLow = word.toLowerCase();
+    if (listWordsLink[wordLow]) {
+      setlistWordsLink((prev) => ({
+        ...prev,
+        [wordLow]: {
+          ...listWordsLink[wordLow],
+          des: [...listWordsLink[wordLow].des, des],
+        },
+      }));
+    }
+  };
+
   const splitFormater = (str: string) => {
     return str
       .replace(RegSymbols, ` $& `)
@@ -83,12 +96,18 @@ export default function Reader({ params }: { params: { slug: string } }) {
         id: index + 1,
         type: EWordType.TEXT,
         relation: EWordRelation.SIBLING,
+        description: [""],
       };
+
+      data.description = [];
 
       const wordLow = word.toLowerCase();
 
-      if (linkState[wordLow]) {
-        data.state = linkState[wordLow];
+      if (listWordsLink[wordLow]) {
+        data.state = listWordsLink[wordLow].state;
+
+        data.description = [...(listWordsLink[wordLow].des || "")];
+        // data.description = ["Descriprion 1...", "Description 2..."];
       }
 
       if (word.match(RegSymbols)) data.type = EWordType.PUNCTUATION;
@@ -98,7 +117,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
     });
 
     const wordMap: { [key: string]: number } = {};
-    // [ipsum] : 1
 
     mappedWords.forEach((obj) => {
       const word = obj.word.toLowerCase();
@@ -130,10 +148,10 @@ export default function Reader({ params }: { params: { slug: string } }) {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("state_english", JSON.stringify(linkState));
+    localStorage.setItem("state_english", JSON.stringify(listWordsLink));
     setData(mapWords(text));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [linkState]);
+  }, [listWordsLink]);
 
   return (
     <section className="flex flex-1 flex-col md:flex-row">
@@ -203,6 +221,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
                     activeLink={activeLink}
                     handleUpdateState={updateState}
                     handleSetActiveLink={setActiveLink}
+                    handlePostDescription={postDescription}
                   />
                 )}
               </Fragment>
@@ -219,7 +238,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
           <button
             type="button"
             className="mb-2 mt-8 rounded-full border border-gray-600 bg-gray-800 px-5 py-2.5 text-sm font-medium text-white hover:border-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-700"
-            onClick={() => setLinkState({})}
+            onClick={() => setlistWordsLink({})}
           >
             Clear
           </button>
