@@ -176,7 +176,8 @@ export default function Reader({ params }: { params: { slug: string } }) {
             count={
               data.filter(
                 (data) =>
-                  data.state == WordLinkType.LINK &&
+                  data.state !== WordLinkType.IGNORE &&
+                  data.state !== WordLinkType.NEW &&
                   data.relation == EWordRelation.ANCHOR,
               ).length
             }
@@ -184,7 +185,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
           <Badge
             state={WordBadgeType.KNOWN}
             count={
-              data.filter((data) => data.state == WordLinkType.KNOWN).length
+              data.filter(
+                (data) =>
+                  data.state == WordLinkType.KNOWN &&
+                  data.relation == EWordRelation.ANCHOR,
+              ).length
             }
           />
           <Badge
