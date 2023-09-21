@@ -3,46 +3,15 @@ import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
 import React from "react";
 import ButtonWordState from "./ButtonWordState";
-
-type TActiveLink = {
-  active: string;
-  index: number;
-};
-
-enum WordLinkType {
-  IGNORE = "IGNORE",
-  NEW = "NEW",
-  LINK = "LINK",
-  RECOGNIZED = "RECOGNIZED",
-  FAMILIAR = "FAMILIAR",
-  LEARNED = "LEARNED",
-  KNOWN = "KNOWN",
-}
-
-type TWord = {
-  word: string;
-  state: WordLinkType;
-  id: number;
-  type: EWordType;
-  relation: EWordRelation;
-};
-
-enum EWordType {
-  NUMBER = "number",
-  TEXT = "text",
-  PUNCTUATION = "punctuation",
-}
-
-enum EWordRelation {
-  ANCHOR,
-  SIBLING,
-}
+import WordLinkType from "@/app/shared/enums/word-link-type.enums";
+import TWord from "@/app/shared/types/word.types";
+import TActiveLink from "@/app/shared/types/active-link.types";
 
 type WordStateControllerProps = {
+  text: TWord;
+  activeLink: TActiveLink;
   handleSetActiveLink: (value: TActiveLink) => void;
   handleUpdateState: (word: string, state: WordLinkType) => void;
-  activeLink: TActiveLink;
-  text: TWord;
 };
 
 export default function WordStateController({

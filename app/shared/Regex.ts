@@ -7,7 +7,7 @@ const DefSymbolsEdge =
   /[-!$%^&*()_+|~=`{}\[\]:";'<>,.\/?\#@‒–—―‹›«»\s\-\/\\_\\.\\+\|\}]/g;
 const RegSymbolsEdge = new RegExp(
   `(?<!\\S)(${DefSymbolsEdge.source})|(${DefSymbolsEdge.source})(?!\\S)`,
-  "g"
+  "g",
 );
 
 const RegDuplicatedSymbols =

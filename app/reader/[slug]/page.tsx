@@ -1,35 +1,20 @@
 "use client";
 import React, { useEffect, useState, Fragment } from "react";
 import Badge from "../components/Badge";
+import { text } from "@/app/config";
+import WordStateController from "../components/WordStateController";
+import Heading from "../components/Heading";
+import WordBadgeType from "@/app/shared/enums/word-badge-type.enums";
+import WordLinkType from "@/app/shared/enums/word-link-type.enums";
+import TWord from "@/app/shared/types/word.types";
+import EWordRelation from "@/app/shared/enums/word-relation-type.enums";
+import EWordType from "@/app/shared/enums/word-type.enums";
 import {
   RegSymbols,
   RegExtraSpaces,
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
-import { text } from "@/app/config";
-import CloseIcon from "@/public/icons/CloseIcon";
-import CheckIcon from "@/public/icons/CheckIcon";
-import TrashIcon from "@/public/icons/TrashIcon";
-import WordStateController from "../components/WordStateController";
-import Heading from "../components/Heading";
-
-enum WordBadgeType {
-  NEW = "NEW",
-  LINK = "LINK",
-  KNOWN = "KNOWN",
-  UNIQUE = "UNIQUE",
-}
-
-enum WordLinkType {
-  IGNORE = "IGNORE",
-  NEW = "NEW",
-  LINK = "LINK",
-  RECOGNIZED = "RECOGNIZED",
-  FAMILIAR = "FAMILIAR",
-  LEARNED = "LEARNED",
-  KNOWN = "KNOWN",
-}
 
 enum WordLinkVisualStyle {
   IGNORE = "",
@@ -40,25 +25,6 @@ enum WordLinkVisualStyle {
   LEARNED = "bg-slate-800 hover:bg-slate-900 bg-opacity-85",
   KNOWN = "",
 }
-
-enum EWordType {
-  NUMBER = "number",
-  TEXT = "text",
-  PUNCTUATION = "punctuation",
-}
-
-enum EWordRelation {
-  ANCHOR,
-  SIBLING,
-}
-
-type TWord = {
-  word: string;
-  state: WordLinkType;
-  id: number;
-  type: EWordType;
-  relation: EWordRelation;
-};
 
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);

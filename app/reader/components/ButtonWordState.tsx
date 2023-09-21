@@ -1,24 +1,15 @@
+import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import React from "react";
 
 type ButtonWordStateProps = {
   children?: React.ReactNode;
   content?: string;
   label: string;
-  handleUpdateState: (word: string, state: WordLinkType) => void;
   state: WordLinkType;
   word: string;
   type: WordLinkType;
+  handleUpdateState: (word: string, state: WordLinkType) => void;
 };
-
-enum WordLinkType {
-  IGNORE = "IGNORE",
-  NEW = "NEW",
-  LINK = "LINK",
-  RECOGNIZED = "RECOGNIZED",
-  FAMILIAR = "FAMILIAR",
-  LEARNED = "LEARNED",
-  KNOWN = "KNOWN",
-}
 
 enum WordlinkStyle {
   IGNORE = "bg-red-500",

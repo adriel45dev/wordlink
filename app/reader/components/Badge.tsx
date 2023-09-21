@@ -1,11 +1,5 @@
 import React from "react";
-
-enum WordBadgeType {
-  NEW = "NEW",
-  LINK = "LINK",
-  KNOWN = "KNOWN",
-  UNIQUE = "UNIQUE",
-}
+import WordBadgeType from "@/app/shared/enums/word-badge-type.enums";
 
 enum WordBadgeVisualStyle {
   NEW = "badge-new",
