@@ -60,7 +60,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     if (!listWordsLink[wordLow]) {
       setlistWordsLink((prev) => ({
         ...prev,
-        [wordLow]: { des: [], state },
+        [wordLow]: { des: [""], state },
       }));
     }
   };
