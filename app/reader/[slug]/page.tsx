@@ -11,7 +11,7 @@ import EWordRelation from "@/app/shared/enums/word-relation-type.enums";
 import EWordType from "@/app/shared/enums/word-type.enums";
 import TActiveLink from "@/app/shared/types/active-link.types";
 import TWordsListLink from "@/app/shared/types/list-words-link.types";
-import Audio from "@/app/components/Audio";
+import Player from "@/app/components/Player";
 import {
   RegSymbols,
   RegExtraSpaces,
@@ -60,7 +60,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
     if (!listWordsLink[wordLow]) {
       setlistWordsLink((prev) => ({
         ...prev,
-        [wordLow]: { des: [""], state },
+        [wordLow]: { des: [], state },
       }));
     }
   };
@@ -107,9 +107,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
       if (listWordsLink[wordLow]) {
         data.state = listWordsLink[wordLow].state;
-
-        data.description = [...(listWordsLink[wordLow].des || "")];
-        // data.description = ["Descriprion 1...", "Description 2..."];
+        data.description = [...listWordsLink[wordLow].des];
       }
 
       if (word.match(RegSymbols)) data.type = EWordType.PUNCTUATION;
@@ -206,7 +204,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
         {/* PLAY */}
         <div className="flex w-full items-center justify-center">
-          <Audio text={text} />
+          <Player text={text} />
         </div>
 
         {/* BOARD  */}
