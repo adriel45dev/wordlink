@@ -1,6 +1,8 @@
-"use client";
 import PlayIcon from "@/public/icons/PlayIcon";
+import PauseIcon from "@/public/icons/PauseIcon"; // Importe o ícone de pausa
 import React, { useState, useEffect } from "react";
+
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
 interface Audio {
   play(): void;
@@ -9,6 +11,7 @@ interface Audio {
 
 const SpeechComponent = ({ text }: { text: string }) => {
   const [audio] = useState(new Audio());
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -20,7 +23,7 @@ const SpeechComponent = ({ text }: { text: string }) => {
     audio.pause();
 
     const response = await fetch(
-      `https://api.voicerss.org/?key=${"0a850a16d8b34bd2bda72a9a298c7418"}&hl=en-us&src=${encodeURIComponent(
+      `https://api.voicerss.org/?key=${API_KEY}&hl=en-us&src=${encodeURIComponent(
         text,
       )}`,
     );
@@ -30,17 +33,24 @@ const SpeechComponent = ({ text }: { text: string }) => {
 
     audio.src = url;
     audio.play();
+    setIsPlaying(true);
+  };
+
+  const handlePause = () => {
+    audio.pause();
+    setIsPlaying(false);
   };
 
   return (
     <button
-      onClick={handlePlay}
+      onClick={isPlaying ? handlePause : handlePlay}
       className="flex flex-col items-center justify-center"
     >
-      <PlayIcon className="h-8 w-8 text-white" />
-      <span className="rounded-2xl bg-green-500 px-2 text-xs text-white">
-        v2
-      </span>
+      {isPlaying ? (
+        <PauseIcon className="h-10 w-10 text-green-500" />
+      ) : (
+        <PlayIcon className="h-10 w-10 text-white" />
+      )}
     </button>
   );
 };

@@ -37,7 +37,6 @@ export default function WordStateController({
         </button>
 
         <div className="flex w-full flex-row items-center justify-center gap-4 py-2">
-          <SpeechComponent text={text.word} />
           <Audio text={text.word} />
           <h2 className="text-2xl font-bold text-white">{activeLink.active}</h2>
         </div>

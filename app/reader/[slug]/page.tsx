@@ -206,7 +206,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
         {/* PLAY */}
         <div className="flex w-full items-center justify-center">
-          <SpeechComponent text={text} />
           <Audio text={text} />
         </div>
 
