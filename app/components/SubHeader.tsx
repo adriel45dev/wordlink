@@ -5,7 +5,7 @@ import DropdownMenu from "./DropdownMenu";
 import Link from "next/link";
 import Menu from "./Menu";
 
-const SubHeader = () => {
+const SubHeader = ({ activePage }: { activePage: string }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
@@ -16,14 +16,14 @@ const SubHeader = () => {
   return (
     <header>
       <nav className=" border-gray-200 bg-gray-950">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
           <Link href="/learn" className="flex items-center">
             <Image
               src="/images/logo.svg"
               alt="Flowbite Logo"
               width={32}
               height={32}
-              className="h-8 mr-3"
+              className="mr-3 h-8"
             />
           </Link>
 
@@ -33,7 +33,7 @@ const SubHeader = () => {
             <button
               data-dropdown-toggle="language-dropdown-menu"
               type="button"
-              className="inline-flex items-center font-medium justify-center pr-4 pl-1 py-1 text-sm text-gray-900 dark:text-white rounded-3xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900 dark:bg-gray-800 dark:hover:text-white"
+              className="inline-flex cursor-pointer items-center justify-center rounded-3xl py-1 pl-1 pr-4 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
               onClick={toggleDropdown}
             >
               <Image
@@ -58,14 +58,14 @@ const SubHeader = () => {
             <button
               data-collapse-toggle="navbar-language"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden"
               aria-controls="navbar-language"
               aria-expanded="false"
               onClick={() => setIsDropdownMenuOpen(!isDropdownMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className="w-5 h-5"
+                className="h-5 w-5"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -82,7 +82,7 @@ const SubHeader = () => {
             </button>
           </div>
           {/* ... Other content ... */}
-          <Menu isOpen={isDropdownMenuOpen} />
+          <Menu isOpen={isDropdownMenuOpen} activePage={activePage} />
         </div>
       </nav>
     </header>
