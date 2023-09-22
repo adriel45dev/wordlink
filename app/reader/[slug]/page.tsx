@@ -11,12 +11,14 @@ import EWordRelation from "@/app/shared/enums/word-relation-type.enums";
 import EWordType from "@/app/shared/enums/word-type.enums";
 import TActiveLink from "@/app/shared/types/active-link.types";
 import TWordsListLink from "@/app/shared/types/list-words-link.types";
+import Audio from "@/app/components/Audio";
 import {
   RegSymbols,
   RegExtraSpaces,
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
+import SpeechComponent from "../components/SpeechComponent";
 
 enum WordLinkVisualStyle {
   IGNORE = "",
@@ -202,8 +204,14 @@ export default function Reader({ params }: { params: { slug: string } }) {
           />
         </div>
 
+        {/* PLAY */}
+        <div className="flex w-full items-center justify-center">
+          <SpeechComponent text={text} />
+          <Audio text={text} />
+        </div>
+
         {/* BOARD  */}
-        <div className="text-normal mt-4 flex w-full flex-wrap justify-stretch gap-x-2 gap-y-1 px-4 py-4 text-white md:mt-8 md:px-24">
+        <div className="text-normal flex w-full flex-wrap justify-stretch gap-x-2 gap-y-1 px-4 py-4 text-white md:px-24">
           {data.map((text, key) =>
             text.type == EWordType.TEXT ? (
               <Fragment key={key}>

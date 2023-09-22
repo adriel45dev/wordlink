@@ -9,6 +9,7 @@ import TActiveLink from "@/app/shared/types/active-link.types";
 import AddIcon from "@/public/icons/AddIcons";
 import InputDescription from "./InputDescription";
 import SpeechComponent from "./SpeechComponent";
+import Audio from "@/app/components/Audio";
 
 type WordStateControllerProps = {
   text: TWord;
@@ -37,6 +38,7 @@ export default function WordStateController({
 
         <div className="flex w-full flex-row items-center justify-center gap-4 py-2">
           <SpeechComponent text={text.word} />
+          <Audio text={text.word} />
           <h2 className="text-2xl font-bold text-white">{activeLink.active}</h2>
         </div>
 

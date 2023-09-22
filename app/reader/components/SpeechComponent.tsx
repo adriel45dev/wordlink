@@ -30,12 +30,19 @@ const SpeechComponent = ({ text }: { text: string }) => {
   };
 
   return (
-    <button onClick={handlePlay} disabled={isPlaying}>
+    <button
+      onClick={handlePlay}
+      disabled={isPlaying}
+      className="flex flex-col items-center justify-center"
+    >
       {isPlaying ? (
         <PauseIcon className="h-8 w-8 text-white" />
       ) : (
         <PlayIcon className="h-8 w-8 text-white" />
       )}
+      <span className="rounded-2xl bg-green-500 px-2 text-xs text-white">
+        v1
+      </span>
     </button>
   );
 };
