@@ -1,5 +1,6 @@
 "use client";
 import CheckIcon from "@/public/icons/CheckIcon";
+import TagIcon from "@/public/icons/TagIcon";
 import React, { useState } from "react";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
@@ -113,10 +114,10 @@ export default function Add() {
               htmlFor="keyword"
               className="mb-2 block text-sm font-medium  text-white"
             >
-              Keyword
+              Image TAG
             </label>
             <div className="flex flex-row">
-              <CheckIcon className="inline-flex h-12 w-12 items-center rounded-l-md border border-r-0  border-gray-600 bg-gray-600 px-1 text-sm text-gray-400" />
+              <TagIcon className="inline-flex h-12 w-12 items-center rounded-l-md border border-r-0  border-gray-600 bg-gray-600 px-1 text-sm text-gray-400" />
               <input
                 placeholder="Cleverly add a single word that better characterizes your text."
                 onChange={handleData}
