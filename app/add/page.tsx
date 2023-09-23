@@ -1,16 +1,26 @@
 "use client";
-import CheckIcon from "@/public/icons/CheckIcon";
-import TagIcon from "@/public/icons/TagIcon";
-import React, { useState } from "react";
+
+import ProfileIcon from "@/public/icons/ProfileIcon";
+import React, { useEffect, useState } from "react";
+import { RegAnySpaces } from "../shared/Regex";
+import ImageIcon from "@/public/icons/ImageIcon";
+import Alert from "../components/Alert";
+import AlertType from "../shared/enums/alert-type.enums";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export default function Add() {
-  const [imageUrl, setImageUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [AlertData, setAlertData] = useState({
+    type: AlertType.Success,
+    message: "",
+    status: false,
+  });
   const [data, setData] = useState({
     title: "",
     text: "",
     author: "",
+    tag: "",
   });
 
   async function fetchImage(query: string) {
@@ -25,18 +35,40 @@ export default function Add() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value, name } = e.target;
+    setAlertData((prevAlert) => ({ ...prevAlert, status: false }));
     setData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleDataTag = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value.replace(RegAnySpaces, ""),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!data.title || !data.text) {
-      return alert("Lembre-se de adicionar um titulo e um texto.");
+    setIsSubmitting(true);
+
+    if (!data.title || !data.text || !data.tag) {
+      setAlertData({
+        message:
+          "To complete the post, put in a title, the content text, and a relevant tag.",
+        type: AlertType.Warning,
+        status: true,
+      });
+      setIsSubmitting(false);
+      return;
     }
-
-    const iamgeSrc = await fetchImage(data.title);
-
-    console.log({ ...data, iamgeSrc });
+    const imageSrc = await fetchImage(data.tag);
+    setAlertData({
+      message: "New text added",
+      type: AlertType.Success,
+      status: true,
+    });
+    handleClear();
+    setIsSubmitting(false);
   };
 
   const handleClear = () => {
@@ -44,13 +76,19 @@ export default function Add() {
       title: "",
       text: "",
       author: "",
+      tag: "",
     });
   };
 
   return (
     <>
-      <h1 className="my-6  text-4xl font-bold text-white">Add</h1>
-      <form className=" mb-6 flex w-full flex-col items-center justify-center space-y-6 px-8 md:px-16">
+      <h1 className="my-6 text-4xl font-bold text-white">Add</h1>
+      {AlertData.status && (
+        <div className="w-full px-8 md:px-16">
+          <Alert data={{ AlertData, setAlertData }} />
+        </div>
+      )}
+      <form className="mb-6 flex w-full flex-col items-center justify-center space-y-6 px-8 md:px-16">
         <div className="w-full">
           <label
             htmlFor="large-input"
@@ -70,12 +108,6 @@ export default function Add() {
         </div>
 
         <div className="w-full">
-          <label
-            htmlFor="text"
-            className="mb-2 block text-lg font-medium  text-white"
-          >
-            Your text
-          </label>
           <textarea
             onChange={handleData}
             value={data.text}
@@ -88,6 +120,33 @@ export default function Add() {
           ></textarea>
         </div>
 
+        <div className="w-full">
+          <label
+            htmlFor="tag"
+            className="mb-2 block text-sm font-medium  text-white"
+          >
+            Image TAG
+          </label>
+          <div className="flex flex-row">
+            <div className="inline-flex  items-center rounded-l-md border border-r-0 border-gray-600 bg-gray-600 px-1 text-sm text-gray-400">
+              <ImageIcon className="h-6 w-6" />
+            </div>
+            <input
+              onChange={handleDataTag}
+              required
+              value={data.tag}
+              type="text"
+              id="tag"
+              name="tag"
+              className="block w-full min-w-0 flex-1 rounded-none rounded-r-lg border border-gray-600 bg-gray-700  p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+          <span className="text-xs text-gray-400">
+            * Cleverly add a <span className="font-bold">single word</span> that
+            better characterizes your text.
+          </span>
+        </div>
+
         <div className=" w-full">
           <label
             htmlFor="author"
@@ -96,7 +155,9 @@ export default function Add() {
             Author
           </label>
           <div className="flex">
-            <CheckIcon className="inline-flex h-12 w-12 items-center rounded-l-md border border-r-0  border-gray-600 bg-gray-600 px-1 text-sm text-gray-400" />
+            <div className="inline-flex  items-center rounded-l-md border border-r-0 border-gray-600 bg-gray-600 px-1 text-sm text-gray-400">
+              <ProfileIcon className="h-6 w-6" />
+            </div>
             <input
               onChange={handleData}
               value={data.author}
@@ -105,53 +166,6 @@ export default function Add() {
               name="author"
               className="block w-full min-w-0 flex-1 rounded-none rounded-r-lg border border-gray-600 bg-gray-700  p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
             />
-          </div>
-        </div>
-
-        <div className="flex w-full flex-col items-center justify-center gap-x-2 gap-y-3 md:flex-row">
-          <div className="w-full">
-            <label
-              htmlFor="keyword"
-              className="mb-2 block text-sm font-medium  text-white"
-            >
-              Image TAG
-            </label>
-            <div className="flex flex-row">
-              <TagIcon className="inline-flex h-12 w-12 items-center rounded-l-md border border-r-0  border-gray-600 bg-gray-600 px-1 text-sm text-gray-400" />
-              <input
-                placeholder="Cleverly add a single word that better characterizes your text."
-                onChange={handleData}
-                value={data.author}
-                type="text"
-                id="keyword"
-                name="keyword"
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-lg border border-gray-600 bg-gray-700  p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <div className=" hidden h-16 items-end md:flex">
-            <span className="text-xs text-white">OR</span>
-          </div>
-
-          <div className=" w-full">
-            <label
-              htmlFor="keyword"
-              className="mb-2 block text-sm font-medium  text-white"
-            >
-              Image URL
-            </label>
-            <div className="flex flex-row">
-              <CheckIcon className="inline-flex h-12 w-12 items-center rounded-l-md border border-r-0  border-gray-600 bg-gray-600 px-1 text-sm text-gray-400" />
-              <input
-                onChange={handleData}
-                value={data.author}
-                type="text"
-                id="keyword"
-                name="keyword"
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-lg border border-gray-600 bg-gray-700  p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
           </div>
         </div>
 
@@ -165,10 +179,11 @@ export default function Add() {
           </button>
           <button
             onClick={handleSubmit}
+            disabled={isSubmitting}
             type="submit"
             className="h-8 w-24 rounded-2xl bg-blue-700 text-lg font-bold text-white hover:bg-blue-600"
           >
-            Save
+            {isSubmitting ? "Saving..." : "Save"}
           </button>
         </div>
       </form>

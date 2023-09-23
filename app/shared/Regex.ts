@@ -15,6 +15,9 @@ const RegDuplicatedSymbols =
 
 const RegNumbers = /[0-9]/g;
 
+const RegAnySpaces =
+  /[\s\u00A0\u1680​​\u180e\u2000-\u200a​​\u2028\u2029​​\u202f\u205f​​\u3000]/g;
+
 export {
   RegSymbols,
   RegExtraSpaces,
@@ -22,4 +25,5 @@ export {
   RegSymbolsEdge,
   RegDuplicatedSymbols,
   RegNumbers,
+  RegAnySpaces,
 };
