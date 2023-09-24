@@ -30,8 +30,19 @@ enum WordLinkVisualStyle {
   KNOWN = "",
 }
 
+type DataType = {
+  title: string;
+  text: string;
+  author: string;
+  tag: string;
+  id: string;
+  image: string;
+};
+
 export default function Reader({ params }: { params: { slug: string } }) {
   const [data, setData] = useState<TWord[]>([]);
+  const [cardData, setCardData] = useState<DataType>();
+
   const [listWordsLink, setlistWordsLink] = useState<TWordsListLink>({});
 
   const [activeLink, setActiveLink] = useState<TActiveLink>();
@@ -40,6 +51,16 @@ export default function Reader({ params }: { params: { slug: string } }) {
     const dataJSON = localStorage.getItem("state_english");
     if (dataJSON) {
       setlistWordsLink(JSON.parse(dataJSON));
+    }
+  };
+
+  const getData = () => {
+    const dataJSON = localStorage.getItem("english_posts");
+    if (dataJSON) {
+      const posts = JSON.parse(dataJSON);
+      if (posts[params.slug]) {
+        setCardData(posts[params.slug]);
+      }
     }
   };
 
@@ -144,20 +165,23 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     getState();
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("state_english", JSON.stringify(listWordsLink));
-    setData(mapWords(text));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listWordsLink]);
+    if (!cardData) return;
 
-  return (
+    localStorage.setItem("state_english", JSON.stringify(listWordsLink));
+
+    setData(mapWords(cardData.text));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listWordsLink, cardData]);
+  return cardData ? (
     <section className="flex flex-1 flex-col md:flex-row">
       <div className="flex w-full flex-1 flex-col items-center py-6">
         {/* HEADING CARD  */}
-        <Heading slug={params.slug} />
+        <Heading slug={cardData.title} />
 
         {/* BADGES COUNT */}
         <div className="my-4 grid w-full grid-cols-2 place-items-center items-center justify-center gap-2 px-4 md:flex">
@@ -204,7 +228,7 @@ export default function Reader({ params }: { params: { slug: string } }) {
 
         {/* PLAY */}
         <div className="flex w-full items-center justify-center">
-          <Player text={text} />
+          <Player text={cardData.text} />
         </div>
 
         {/* BOARD  */}
@@ -255,6 +279,10 @@ export default function Reader({ params }: { params: { slug: string } }) {
           </button>
         </div>
       </div>
+    </section>
+  ) : (
+    <section className="flex h-full w-full flex-1 items-center justify-center">
+      <h1 className="text-4xl font-bold text-gray-400"> Card not found !</h1>
     </section>
   );
 }

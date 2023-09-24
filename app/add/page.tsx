@@ -6,22 +6,60 @@ import { RegAnySpaces } from "../shared/Regex";
 import ImageIcon from "@/public/icons/ImageIcon";
 import Alert from "../components/Alert";
 import AlertType from "../shared/enums/alert-type.enums";
+import crypto from "crypto";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
+type AlertDataType = {
+  type: AlertType;
+  message: string;
+  display: boolean;
+  link?: {
+    label: string;
+    href: string;
+  };
+};
+
+type DataType = {
+  title: string;
+  text: string;
+  author: string;
+  tag: string;
+  id: string;
+  image: string;
+};
+
 export default function Add() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [AlertData, setAlertData] = useState({
+  const [AlertData, setAlertData] = useState<AlertDataType>({
     type: AlertType.Success,
     message: "",
-    status: false,
+    display: false,
   });
-  const [data, setData] = useState({
+  const [input, setInput] = useState<DataType>({
     title: "",
     text: "",
     author: "",
     tag: "",
+    id: "",
+    image: "",
   });
+
+  const [data, setData] = useState<{ [id: string]: DataType }>({});
+
+  useEffect(() => {
+    const dataJSON = localStorage.getItem("english_posts");
+    if (dataJSON) {
+      setData(JSON.parse(dataJSON));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      const dataJSON = JSON.stringify(data);
+      localStorage.setItem("english_posts", dataJSON);
+    }
+  }, [data]);
 
   async function fetchImage(query: string) {
     const response = await fetch(
@@ -35,55 +73,82 @@ export default function Add() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value, name } = e.target;
-    setAlertData((prevAlert) => ({ ...prevAlert, status: false }));
-    setData((prevData) => ({ ...prevData, [name]: value }));
+    setInput((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleDataTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
-    setData((prevData) => ({
+    setInput((prevData) => ({
       ...prevData,
       [name]: value.replace(RegAnySpaces, ""),
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    if (!data.title || !data.text || !data.tag) {
-      setAlertData({
-        message:
-          "To complete the post, put in a title, the content text, and a relevant tag.",
-        type: AlertType.Warning,
-        status: true,
-      });
-      setIsSubmitting(false);
-      return;
-    }
-    const imageSrc = await fetchImage(data.tag);
-    setAlertData({
-      message: "New text added",
-      type: AlertType.Success,
-      status: true,
-    });
-    handleClear();
-    setIsSubmitting(false);
-  };
-
   const handleClear = () => {
-    setData({
+    setInput({
       title: "",
       text: "",
       author: "",
       tag: "",
+      id: "",
+      image: "",
     });
   };
+
+  const isValidInputData = (): boolean => {
+    if (!input.title || !input.text || !input.tag) {
+      setAlertData({
+        message:
+          "To complete the post, put in a title, the content text, and a relevant tag.",
+        type: AlertType.Warning,
+        display: true,
+      });
+      setIsSubmitting(false);
+      return false;
+    }
+
+    return true;
+  };
+
+  const onSuccess = (id: string) => {
+    setAlertData({
+      message: "New text added.",
+      type: AlertType.Success,
+      display: true,
+      link: {
+        label: "View post.",
+        href: `../reader/${id}`,
+      },
+    });
+
+    handleClear();
+    setIsSubmitting(false);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isValidInputData()) return;
+
+    setIsSubmitting(true);
+
+    const image = await fetchImage(input.tag);
+
+    const id = crypto.randomBytes(6).toString("hex");
+
+    const newData = { ...input, id, image };
+
+    setData((prevData) => ({ ...prevData, [id]: newData }));
+
+    onSuccess(id);
+  };
+
+  console.log(data);
 
   return (
     <>
       <h1 className="my-6 text-4xl font-bold text-white">Add</h1>
-      {AlertData.status && (
+      {AlertData.display && (
         <div className="w-full px-8 md:px-16">
           <Alert data={{ AlertData, setAlertData }} />
         </div>
@@ -97,7 +162,7 @@ export default function Add() {
             Title
           </label>
           <input
-            value={data.title}
+            value={input.title}
             onChange={handleData}
             required
             id="large-input"
@@ -110,7 +175,7 @@ export default function Add() {
         <div className="w-full">
           <textarea
             onChange={handleData}
-            value={data.text}
+            value={input.text}
             required
             id="text"
             rows={4}
@@ -134,7 +199,7 @@ export default function Add() {
             <input
               onChange={handleDataTag}
               required
-              value={data.tag}
+              value={input.tag}
               type="text"
               id="tag"
               name="tag"
@@ -160,7 +225,7 @@ export default function Add() {
             </div>
             <input
               onChange={handleData}
-              value={data.author}
+              value={input.author}
               type="text"
               id="author"
               name="author"

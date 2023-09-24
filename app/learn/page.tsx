@@ -1,39 +1,54 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Card from "./components/Card";
 import LibrarySection from "./components/LibrarySection";
 
+type DataType = {
+  title: string;
+  text: string;
+  author: string;
+  tag: string;
+  id: string;
+  image: string;
+};
+
 export default function Learn() {
+  const [data, setData] = useState<{ [id: string]: DataType }>({});
+
+  useEffect(() => {
+    const dataJSON = localStorage.getItem("english_posts");
+    if (dataJSON) {
+      setData(JSON.parse(dataJSON));
+    }
+
+    // setData((prev) => ({ ...prev, ...POST_CARDS }));
+  }, []);
+
+  useEffect;
   return (
     <>
-      <h1 className="text-4xl my-6 font-bold text-white">Library</h1>
+      <h1 className="my-6 text-4xl font-bold text-white">Library</h1>
 
       {/* Mini Stories */}
-      <LibrarySection title="Mini Stories">
-        <Card id={0} />
-        <Card id={1} />
-        <Card id={2} />
-        <Card id={3} />
-        <Card id={4} />
-        <Card id={5} />
-        <Card id={6} />
-        <Card id={7} />
-        <Card id={8} />
-        <Card id={9} />
-        <Card id={10} />
-        <Card id={11} />
-      </LibrarySection>
+      {/* <LibrarySection title="Mini Stories">
+        <></>
+      </LibrarySection> */}
 
       {/* Continue Studying */}
-      <LibrarySection title="Continue Studying">
-        <Card id={10} />
-        <Card id={11} />
-      </LibrarySection>
+      {/* <LibrarySection title="Continue Studying">
+        <></>
+      </LibrarySection> */}
 
       {/* Last Added */}
-      <LibrarySection title="Last Added">
-        <Card id={20} />
-        <Card id={21} />
-        <Card id={22} />
-      </LibrarySection>
+      {data && (
+        <LibrarySection title="Last Added">
+          {Object.keys(data).map((id, key) => {
+            const card = data[id];
+            return <Card key={key} data={card} />;
+          })}
+        </LibrarySection>
+      )}
     </>
   );
 }

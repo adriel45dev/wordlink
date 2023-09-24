@@ -33,30 +33,30 @@ export default function LibrarySection({
   };
 
   return (
-    <section className="w-full h-full px-8 my-6 flex justify-center items-center gap-2 select-none">
+    <section className="my-6 flex h-full w-full select-none items-center justify-center gap-2 px-8">
       <BackIcon
-        className="text-white w-6 h-6 hover:scale-125"
+        className="h-6 w-6 text-white hover:scale-125"
         onClick={handlePrevious}
       />
 
       {/* CONTAINER CARD */}
-      <div className="w-full h-full flex flex-col gap-4">
+      <div className="flex h-full w-full flex-col gap-4">
         <div className="flex flex-row items-center justify-between">
           <h2 className="text-2xl text-white">{title}</h2>
-          <button className="text-gray-400 text-xs ">View All</button>
+          <button className="text-xs text-gray-400 ">View All</button>
         </div>
         {/* CARDS MOBILE */}
-        <div className="md:hidden grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 duration-700 ease-in-out">
+        <div className="grid w-full grid-cols-1 items-center justify-center gap-4 duration-700 ease-in-out md:hidden md:grid-cols-5">
           {Children.toArray(children)[index]}
         </div>
         {/* CARDS LG DEVICES */}
-        <div className="hidden md:grid grid-cols-1 gap-4 w-full justify-center items-center md:grid-cols-5 duration-700 ease-in-out">
+        <div className="hidden w-full grid-cols-1 items-center justify-center gap-4 duration-700 ease-in-out md:grid md:grid-cols-5">
           {Children.toArray(children).slice(startIndex, endIndex)}
         </div>
       </div>
 
       <NextIcon
-        className="text-white w-6 h-6 hover:scale-125"
+        className="h-6 w-6 text-white hover:scale-125"
         onClick={handleNext}
       />
     </section>
