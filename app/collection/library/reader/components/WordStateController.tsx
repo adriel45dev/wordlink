@@ -6,9 +6,7 @@ import ButtonWordState from "./ButtonWordState";
 import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
 import TActiveLink from "@/app/shared/types/active-link.types";
-import AddIcon from "@/public/icons/AddIcons";
 import InputDescription from "./InputDescription";
-import SpeechComponent from "./SpeechComponent";
 import Player from "@/app/components/Player";
 
 type WordStateControllerProps = {

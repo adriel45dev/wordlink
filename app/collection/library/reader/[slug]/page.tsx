@@ -1,5 +1,4 @@
 "use client";
-import { text } from "@/app/config";
 import React, { useEffect, useState, Fragment } from "react";
 import Badge from "../components/Badge";
 import WordStateController from "../components/WordStateController";
