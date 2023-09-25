@@ -11,9 +11,10 @@ export default function Home() {
   const [flags, setFlags] = useState(false);
 
   useEffect(() => {
-    const dataJSON = localStorage.getItem("english_posts");
+    const languages = ["English", "Portuguese"];
+    const dataJSON = localStorage.getItem("English_posts");
     if (!dataJSON) {
-      localStorage.setItem("english_posts", JSON.stringify(POST_CARDS));
+      localStorage.setItem("English_posts", JSON.stringify(POST_CARDS));
     }
   }, []);
 

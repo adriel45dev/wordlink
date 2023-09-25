@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import Card from "./components/Card";
 import LibrarySection from "./components/LibrarySection";
 import { NavbarContext } from "@/app/context/NavbarContext";
+import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
+import { LanguageContext } from "@/app/context/LanguageContext";
 
 type DataType = {
   title: string;
@@ -16,19 +18,20 @@ type DataType = {
 
 export default function Learn() {
   const [data, setData] = useState<{ [id: string]: DataType }>({});
+  const { language } = useContext(LanguageContext);
 
   const { setTab } = useContext(NavbarContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("library"), []);
 
   useEffect(() => {
-    const dataJSON = localStorage.getItem("english_posts");
+    const dataJSON = localStorage.getItem(
+      `${LanguageCodeReference[language.selected]}_posts`,
+    );
     if (dataJSON) {
       setData(JSON.parse(dataJSON));
     }
-
-    // setData((prev) => ({ ...prev, ...POST_CARDS }));
-  }, []);
+  }, [language]);
 
   useEffect;
   return (

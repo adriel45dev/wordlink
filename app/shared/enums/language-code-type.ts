@@ -4,11 +4,11 @@ enum LanguageCode {
   pt = "br",
 }
 
-enum LanguageCodeReference {
-  none = "Wordlink",
-  en = "English",
-  pt = "Portuguese",
-}
+const LanguageCodeReference = {
+  [LanguageCode.en]: "English",
+  [LanguageCode.pt]: "Portuguese",
+  [LanguageCode.none]: "Wordlink",
+};
 
 enum Language {
   WordLink = "WordLink",

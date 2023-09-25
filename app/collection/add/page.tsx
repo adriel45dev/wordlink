@@ -10,11 +10,14 @@ import crypto from "crypto";
 import AlertDataType from "@/app/shared/types/alert-data.types";
 import PostDataType from "@/app/shared/types/post-data-types";
 import { NavbarContext } from "@/app/context/NavbarContext";
+import { LanguageContext } from "@/app/context/LanguageContext";
+import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export default function Add() {
   const { setTab } = useContext(NavbarContext);
+  const { language } = useContext(LanguageContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("add"), []);
 
@@ -33,22 +36,30 @@ export default function Add() {
     tag: "",
     id: "",
     image: "",
+    language: "",
   });
 
   const [data, setData] = useState<{ [id: string]: PostDataType }>({});
 
   useEffect(() => {
-    const dataJSON = localStorage.getItem("english_posts");
+    const dataJSON = localStorage.getItem(
+      `${LanguageCodeReference[language.selected]}_posts`,
+    );
     if (dataJSON) {
       setData(JSON.parse(dataJSON));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (data) {
       const dataJSON = JSON.stringify(data);
-      localStorage.setItem("english_posts", dataJSON);
+      localStorage.setItem(
+        `${LanguageCodeReference[language.selected]}_posts`,
+        dataJSON,
+      );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   async function fetchImage(query: string) {
@@ -64,6 +75,7 @@ export default function Add() {
   ) => {
     const { value, name } = e.target;
     setInput((prevData) => ({ ...prevData, [name]: value }));
+    setAlertData((prevAlert) => ({ ...prevAlert, display: false }));
   };
 
   const handleDataTag = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +94,7 @@ export default function Add() {
       tag: "",
       id: "",
       image: "",
+      language: "",
     });
   };
 
@@ -126,7 +139,7 @@ export default function Add() {
 
     const id = crypto.randomBytes(6).toString("hex");
 
-    const newData = { ...input, id, image };
+    const newData = { ...input, id, image, language: language.selected };
 
     setData((prevData) => ({ ...prevData, [id]: newData }));
 

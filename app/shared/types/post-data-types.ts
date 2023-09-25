@@ -5,6 +5,7 @@ type PostDataType = {
   tag: string;
   id: string;
   image: string;
+  language: string;
 };
 
 export default PostDataType;

@@ -22,10 +22,11 @@ export const LanguageContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [language, setLanguage] = useState<LanguageType>({
-    selected: LanguageCode.en,
+    selected: LanguageCode.none,
     languages: {
-      [LanguageCode.en]: Language.English,
       [LanguageCode.none]: Language.WordLink,
+      [LanguageCode.en]: Language.English,
+      [LanguageCode.pt]: Language.Portuguese,
     },
   });
 
@@ -33,13 +34,17 @@ export const LanguageContextProvider = ({
     const dataJSON = localStorage.getItem("languages");
     if (dataJSON) {
       const data = JSON.parse(dataJSON);
-      setLanguage(data);
+      setLanguage(data as LanguageType);
     }
   }, []);
 
   useEffect(() => {
-    const dataJSON = JSON.stringify(language);
-    localStorage.setItem("languages", dataJSON);
+    const newDataJSON = JSON.stringify(language);
+    const dataJSON = localStorage.getItem("languages");
+
+    if (dataJSON) {
+      localStorage.setItem("languages", newDataJSON);
+    }
   }, [language]);
 
   return (

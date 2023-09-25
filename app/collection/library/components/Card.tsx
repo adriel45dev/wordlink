@@ -26,7 +26,7 @@ export default function Card({ data }: CardProps) {
       <div className="h-32 w-full">
         <div className="relative h-full">
           <Image
-            src={`${image}` || "/images/card/cover-3.jpg"}
+            src={`${image}` || "/images/card/default.jpg"}
             alt="cover"
             className="rounded-t-2xl object-cover"
             fill={true}

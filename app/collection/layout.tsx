@@ -8,7 +8,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <LanguageContextProvider>
       <NavbarContextProvider>
         <Header />
-        <main className="flex min-h-screen flex-col  items-center bg-slate-900">
+        <main className="flex min-h-screen flex-1 flex-col items-center bg-slate-900">
           {children}
         </main>
       </NavbarContextProvider>

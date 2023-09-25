@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 import Badge from "../components/Badge";
 import WordStateController from "../components/WordStateController";
 import Heading from "../components/Heading";
@@ -17,6 +17,9 @@ import {
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
+import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
+import { LanguageContext } from "@/app/context/LanguageContext";
+import PostDataType from "@/app/shared/types/post-data-types";
 
 enum WordLinkVisualStyle {
   IGNORE = "",
@@ -28,32 +31,30 @@ enum WordLinkVisualStyle {
   KNOWN = "",
 }
 
-type DataType = {
-  title: string;
-  text: string;
-  author: string;
-  tag: string;
-  id: string;
-  image: string;
-};
-
 export default function Reader({ params }: { params: { slug: string } }) {
+  const { language } = useContext(LanguageContext);
+
   const [data, setData] = useState<TWord[]>([]);
-  const [cardData, setCardData] = useState<DataType>();
+
+  const [cardData, setCardData] = useState<PostDataType>();
 
   const [listWordsLink, setlistWordsLink] = useState<TWordsListLink>({});
 
   const [activeLink, setActiveLink] = useState<TActiveLink>();
 
   const getState = () => {
-    const dataJSON = localStorage.getItem("state_english");
+    const dataJSON = localStorage.getItem(
+      `${LanguageCodeReference[language.selected]}_vocabulary`,
+    );
     if (dataJSON) {
       setlistWordsLink(JSON.parse(dataJSON));
     }
   };
 
   const getData = () => {
-    const dataJSON = localStorage.getItem("english_posts");
+    const dataJSON = localStorage.getItem(
+      `${LanguageCodeReference[language.selected]}_posts`,
+    );
     if (dataJSON) {
       const posts = JSON.parse(dataJSON);
       if (posts[params.slug]) {
@@ -165,21 +166,25 @@ export default function Reader({ params }: { params: { slug: string } }) {
     getState();
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [language]);
 
   useEffect(() => {
     if (!cardData) return;
 
-    localStorage.setItem("state_english", JSON.stringify(listWordsLink));
+    localStorage.setItem(
+      `${LanguageCodeReference[language.selected]}_vocabulary`,
+      JSON.stringify(listWordsLink),
+    );
 
     setData(mapWords(cardData.text));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listWordsLink, cardData]);
-  return cardData ? (
+
+  return cardData && cardData.language == language.selected ? (
     <section className="flex flex-1 flex-col md:flex-row">
-      <div className="flex w-full flex-1 flex-col items-center py-6">
+      <div className="flex w-full flex-1 flex-col items-center pb-6">
         {/* HEADING CARD  */}
-        <Heading slug={cardData.title} />
+        <Heading slug={cardData.title} image={cardData.image} />
 
         {/* BADGES COUNT */}
         <div className="my-4 grid w-full grid-cols-2 place-items-center items-center justify-center gap-2 px-4 md:flex">

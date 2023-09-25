@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState, useContext } from "react";
 import { LanguageContext } from "@/app/context/LanguageContext";
 import {
+  Language,
   LanguageCode,
   LanguageCodeReference,
 } from "@/app/shared/enums/language-code-type";
@@ -25,6 +26,9 @@ const LanguagesMenu = () => {
           width={32}
           height={32}
         />
+
+        {LanguageCodeReference[language.selected]}
+
         <Image
           src={"/images/dropdown-arrow.svg"}
           alt="toggle"
@@ -32,7 +36,6 @@ const LanguagesMenu = () => {
           height={20}
           className="hover:rotate-180"
         />
-        {/* English */}
       </button>
       <div
         className={`${
