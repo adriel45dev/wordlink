@@ -20,9 +20,9 @@ const CODE_FLAGS: Languages = {
 const CODE_LANGUAGES: Languages = {
   us: "English",
   br: "Portuguese",
-  cn: "Chinese",
-  es: "Spanish",
-  ru: "Russian",
+  // cn: "Chinese",
+  // es: "Spanish",
+  // ru: "Russian",
 };
 
 const text = `In an increasingly interconnected world, the ability to communicate in different languages is a valuable skill that opens doors to limitless opportunities. It's in this context that the revolutionary platform Wordlink Languages emerges. This innovative platform aims to make language learning accessible, effective, and inspiring for people of all ages and backgrounds.
@@ -41,3 +41,10 @@ const POST_CARDS = {
 };
 
 export { CODE_FLAGS, CODE_LANGUAGES, text, POST_CARDS };
+
+// https://www.bing.com/translator?from=en&to=pt&text=world
+// https://www.deepl.com/en/translator#pt/en/ol%C3%A1%0A
+// https://translate.google.com/?from=en&to=pt&text=world
+// https://www.linguee.com/english-portuguese/search?source=auto&query=hi
+// https://translate.yandex.com/en/?source_lang=en&target_lang=pt-BR&text=hi
+// https://www.reverso.net/text-translation#sl=eng&tl=por&text=hi

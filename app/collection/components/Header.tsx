@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import DropdownMenu from "./DropdownMenu";
+import LanguagesMenu from "./LanguagesMenu";
 import Link from "next/link";
 import Navbar from "./Navbar";
 
@@ -20,7 +20,7 @@ const Header = () => {
           <Link href="/collection/library" className="flex items-center">
             <Image
               src="/images/logo.svg"
-              alt="Flowbite Logo"
+              alt="Worlink Logo"
               width={32}
               height={32}
               className="mr-3 h-8"
@@ -30,30 +30,7 @@ const Header = () => {
           <div className="flex items-center md:order-2">
             {/* Deve carregar o ultimo idioma estudado */}
 
-            <button
-              data-dropdown-toggle="language-dropdown-menu"
-              type="button"
-              className="inline-flex cursor-pointer items-center justify-center rounded-3xl py-1 pl-1 pr-4 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
-              onClick={toggleDropdown}
-            >
-              <Image
-                src="/images/flags/us.svg"
-                alt="Flag Icon"
-                className="mr-2 rounded-full hover:scale-105"
-                width={32}
-                height={32}
-              />
-              <Image
-                src={"/images/dropdown-arrow.svg"}
-                alt="toggle"
-                width={20}
-                height={20}
-                className="hover:rotate-180"
-              />
-              {/* English */}
-            </button>
-
-            <DropdownMenu isOpen={isDropdownOpen} />
+            <LanguagesMenu />
 
             <button
               data-collapse-toggle="navbar-language"
