@@ -180,7 +180,8 @@ export default function Reader({ params }: { params: { slug: string } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listWordsLink, cardData]);
 
-  return cardData && cardData.language == language.selected ? (
+  return cardData &&
+    cardData.language == LanguageCodeReference[language.selected] ? (
     <section className="flex flex-1 flex-col md:flex-row">
       <div className="flex w-full flex-1 flex-col items-center pb-6">
         {/* HEADING CARD  */}

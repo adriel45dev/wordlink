@@ -139,7 +139,12 @@ export default function Add() {
 
     const id = crypto.randomBytes(6).toString("hex");
 
-    const newData = { ...input, id, image, language: language.selected };
+    const newData = {
+      ...input,
+      id,
+      image,
+      language: LanguageCodeReference[language.selected],
+    };
 
     setData((prevData) => ({ ...prevData, [id]: newData }));
 
