@@ -22,8 +22,9 @@ export const LanguageContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [language, setLanguage] = useState<LanguageType>({
-    selected: LanguageCode.none,
+    selected: LanguageCode.en,
     languages: {
+      [LanguageCode.en]: Language.English,
       [LanguageCode.none]: Language.WordLink,
     },
   });
