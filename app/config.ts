@@ -30,6 +30,7 @@ Wordlink Languages recognizes the importance of linguistic diversity. It offers 
 
 const POST_CARDS = {
   ["1"]: {
+    language: "English",
     title: "A Peaceful Sunday Morning",
     text: `It was a sunny Sunday morning. John woke up early and decided to go for a walk in the park. There were a few people there already. Some were jogging and others were walking their dogs. John sat down on a bench and watched the ducks swimming in the pond. It was so peaceful to be out in nature. John felt happy to have this time to relax before the busy week ahead. After an hour, he got up and walked back home, ready to start the day.`,
     author: "wordlink",
