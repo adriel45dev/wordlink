@@ -1,5 +1,4 @@
 import React from "react";
-import SubHeader from "../components/SubHeader";
 import { NavbarContextProvider } from "../context/NavbarContext";
 import Header from "./components/Header";
 
