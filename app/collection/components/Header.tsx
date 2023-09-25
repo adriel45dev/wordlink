@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import DropdownMenu from "./DropdownMenu";
 import Link from "next/link";
-import Menu from "./Menu";
+import Navbar from "./Navbar";
 
-const SubHeader = ({ activePage }: { activePage: string }) => {
+const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
@@ -15,9 +15,9 @@ const SubHeader = ({ activePage }: { activePage: string }) => {
 
   return (
     <header>
-      <nav className=" border-gray-200 bg-gray-950">
+      <nav className="border-gray-200 bg-gray-950">
         <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4">
-          <Link href="/learn" className="flex items-center">
+          <Link href="/collection/library" className="flex items-center">
             <Image
               src="/images/logo.svg"
               alt="Flowbite Logo"
@@ -82,11 +82,11 @@ const SubHeader = ({ activePage }: { activePage: string }) => {
             </button>
           </div>
           {/* ... Other content ... */}
-          <Menu isOpen={isDropdownMenuOpen} activePage={activePage} />
+          <Navbar isOpen={isDropdownMenuOpen} />
         </div>
       </nav>
     </header>
   );
 };
 
-export default SubHeader;
+export default Header;

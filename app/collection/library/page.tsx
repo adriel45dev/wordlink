@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Card from "./components/Card";
 import LibrarySection from "./components/LibrarySection";
+import { NavbarContext } from "@/app/context/NavbarContext";
 
 type DataType = {
   title: string;
@@ -15,6 +16,10 @@ type DataType = {
 
 export default function Learn() {
   const [data, setData] = useState<{ [id: string]: DataType }>({});
+
+  const { setTab } = useContext(NavbarContext);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setTab("library"), []);
 
   useEffect(() => {
     const dataJSON = localStorage.getItem("english_posts");

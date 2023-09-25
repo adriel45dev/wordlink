@@ -18,7 +18,6 @@ import {
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
-import SpeechComponent from "../components/SpeechComponent";
 
 enum WordLinkVisualStyle {
   IGNORE = "",

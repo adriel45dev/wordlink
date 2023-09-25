@@ -19,7 +19,7 @@ export default function Card({ data }: CardProps) {
   const { title, text, author, tag, id, image } = data;
   return (
     <Link
-      href={`/reader/${id}`}
+      href={`/collection/library/reader/${id}`}
       className="group flex h-72 flex-col items-center rounded-2xl bg-neutral-950 text-white hover:scale-105 hover:bg-neutral-900"
     >
       {/* Card Image */}

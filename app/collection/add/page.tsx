@@ -1,42 +1,32 @@
 "use client";
 
 import ProfileIcon from "@/public/icons/ProfileIcon";
-import React, { useEffect, useState } from "react";
-import { RegAnySpaces } from "../shared/Regex";
+import React, { useContext, useEffect, useState } from "react";
+import { RegAnySpaces } from "@/app/shared/Regex";
 import ImageIcon from "@/public/icons/ImageIcon";
-import Alert from "../components/Alert";
-import AlertType from "../shared/enums/alert-type.enums";
+import Alert from "@/app/components/Alert";
+import AlertType from "@/app/shared/enums/alert-type.enums";
 import crypto from "crypto";
+import AlertDataType from "@/app/shared/types/alert-data.types";
+import PostDataType from "@/app/shared/types/post-data-types";
+import { NavbarContext } from "@/app/context/NavbarContext";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
-type AlertDataType = {
-  type: AlertType;
-  message: string;
-  display: boolean;
-  link?: {
-    label: string;
-    href: string;
-  };
-};
-
-type DataType = {
-  title: string;
-  text: string;
-  author: string;
-  tag: string;
-  id: string;
-  image: string;
-};
-
 export default function Add() {
+  const { setTab } = useContext(NavbarContext);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setTab("add"), []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [AlertData, setAlertData] = useState<AlertDataType>({
     type: AlertType.Success,
     message: "",
     display: false,
   });
-  const [input, setInput] = useState<DataType>({
+
+  const [input, setInput] = useState<PostDataType>({
     title: "",
     text: "",
     author: "",
@@ -45,7 +35,7 @@ export default function Add() {
     image: "",
   });
 
-  const [data, setData] = useState<{ [id: string]: DataType }>({});
+  const [data, setData] = useState<{ [id: string]: PostDataType }>({});
 
   useEffect(() => {
     const dataJSON = localStorage.getItem("english_posts");
@@ -69,7 +59,7 @@ export default function Add() {
     return data.urls.regular;
   }
 
-  const handleData = (
+  const handleFormData = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { value, name } = e.target;
@@ -80,11 +70,11 @@ export default function Add() {
     const { value, name } = e.target;
     setInput((prevData) => ({
       ...prevData,
-      [name]: value.replace(RegAnySpaces, ""),
+      [name]: value.replace(RegAnySpaces, "").toLowerCase(),
     }));
   };
 
-  const handleClear = () => {
+  const clearForm = () => {
     setInput({
       title: "",
       text: "",
@@ -110,22 +100,22 @@ export default function Add() {
     return true;
   };
 
-  const onSuccess = (id: string) => {
+  const postSuccess = (id: string) => {
     setAlertData({
       message: "New text added.",
       type: AlertType.Success,
       display: true,
       link: {
         label: "View post.",
-        href: `../reader/${id}`,
+        href: `/collection/library/reader/${id}`,
       },
     });
 
-    handleClear();
+    clearForm();
     setIsSubmitting(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!isValidInputData()) return;
@@ -140,10 +130,8 @@ export default function Add() {
 
     setData((prevData) => ({ ...prevData, [id]: newData }));
 
-    onSuccess(id);
+    postSuccess(id);
   };
-
-  console.log(data);
 
   return (
     <>
@@ -163,7 +151,7 @@ export default function Add() {
           </label>
           <input
             value={input.title}
-            onChange={handleData}
+            onChange={handleFormData}
             required
             id="large-input"
             type="text"
@@ -174,7 +162,7 @@ export default function Add() {
 
         <div className="w-full">
           <textarea
-            onChange={handleData}
+            onChange={handleFormData}
             value={input.text}
             required
             id="text"
@@ -224,7 +212,7 @@ export default function Add() {
               <ProfileIcon className="h-6 w-6" />
             </div>
             <input
-              onChange={handleData}
+              onChange={handleFormData}
               value={input.author}
               type="text"
               id="author"
@@ -238,12 +226,12 @@ export default function Add() {
           <button
             type="button"
             className="h-8 w-24 rounded-2xl bg-slate-800 text-lg font-bold text-white hover:bg-slate-600"
-            onClick={handleClear}
+            onClick={clearForm}
           >
             Clear
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={handleFormSubmit}
             disabled={isSubmitting}
             type="submit"
             className="h-8 w-24 rounded-2xl bg-blue-700 text-lg font-bold text-white hover:bg-blue-600"
