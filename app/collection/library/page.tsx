@@ -30,6 +30,8 @@ export default function Learn() {
     );
     if (dataJSON) {
       setData(JSON.parse(dataJSON));
+    } else {
+      setData({});
     }
   }, [language]);
 
