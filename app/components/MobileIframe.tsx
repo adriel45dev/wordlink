@@ -10,14 +10,12 @@ const MobileIframe = ({ url }: MobileIframeProps) => {
 
   // Render the iframe
   return (
-    <div className="m-2 flex w-full px-8">
-      <iframe
-        src={url}
-        seamless
-        title="Mobile Iframe"
-        className="flex h-96 w-full rounded-2xl "
-      />
-    </div>
+    <iframe
+      src={url}
+      seamless
+      title="Mobile Iframe"
+      className="flex h-96 w-full rounded-2xl "
+    />
   );
 };
 

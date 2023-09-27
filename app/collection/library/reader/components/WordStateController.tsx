@@ -55,7 +55,7 @@ export default function WordStateController({
           word={text.word}
         />
         {/* BUTTON ACTIONS */}
-        <div className="my-2 flex w-full flex-row flex-wrap items-center justify-center gap-2 py-2">
+        <div className="my-2 flex max-w-full flex-row flex-wrap items-center justify-center gap-2 py-2">
           <ButtonWordState
             label="Ignore"
             state={text.state}
@@ -113,7 +113,7 @@ export default function WordStateController({
           </ButtonWordState>
         </div>
 
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full flex-wrap items-center justify-center p-4">
           <MobileIframe url="https://www.bing.com/translator?from=en&to=pt&text=world" />
         </div>
       </div>
