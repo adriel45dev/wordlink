@@ -1,13 +1,14 @@
 import CheckIcon from "@/public/icons/CheckIcon";
 import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
-import React, { useState } from "react";
+import React from "react";
 import ButtonWordState from "./ButtonWordState";
 import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
 import TActiveLink from "@/app/shared/types/active-link.types";
 import InputDescription from "./InputDescription";
 import Player from "@/app/components/Player";
+import MobileIframe from "@/app/components/MobileIframe";
 
 type WordStateControllerProps = {
   text: TWord;
@@ -110,6 +111,10 @@ export default function WordStateController({
           >
             <CheckIcon className="h-10 w-10 " />
           </ButtonWordState>
+        </div>
+
+        <div className="flex w-full flex-col items-center justify-center">
+          <MobileIframe url="https://www.bing.com/translator?from=en&to=pt&text=world" />
         </div>
       </div>
     </div>
