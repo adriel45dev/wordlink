@@ -113,7 +113,7 @@ export default function WordStateController({
           </ButtonWordState>
         </div>
 
-        <div className="flex w-full flex-col items-center justify-center">
+        <div className="flex w-full items-center justify-center">
           <MobileIframe url="https://www.bing.com/translator?from=en&to=pt&text=world" />
         </div>
       </div>

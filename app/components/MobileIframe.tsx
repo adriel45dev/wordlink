@@ -10,12 +10,12 @@ const MobileIframe = ({ url }: MobileIframeProps) => {
 
   // Render the iframe
   return (
-    <div className="no-scrollbar m-2 flex w-full px-8">
+    <div className="m-2 flex w-full px-8">
       <iframe
         src={url}
         seamless
         title="Mobile Iframe"
-        className="no-scrollbar inline-block h-96 min-w-full rounded-2xl "
+        className="flex h-96 w-full rounded-2xl "
       />
     </div>
   );
