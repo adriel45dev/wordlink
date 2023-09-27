@@ -10,7 +10,7 @@ const MobileIframe = ({ url }: MobileIframeProps) => {
 
   // Render the iframe
   return (
-    <div className="no-scrollbar w-full scale-75 px-8">
+    <div className="no-scrollbar m-2 flex w-full px-8">
       <iframe
         src={url}
         seamless
