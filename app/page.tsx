@@ -42,23 +42,29 @@ export default function Home() {
           />
           {flags && (
             <p className="mb-6 px-3 text-center text-xs font-normal text-gray-500 dark:text-gray-400 sm:px-16 lg:text-xs xl:px-48">
-              Mandarin Chinese, Spanish, English, Hindi, Bengali, Portuguese,
-              Russian, Japanese, Western Punjabi, Marathi, Telugu, Wu Chinese,
-              Turkish, Korean, French, German, Vietnamese, Tamil, Yue Chinese,
-              Urdu, Javanese, Italian, Egyptian Arabic, Gujarati, Iranian
-              Persian, Bhojpuri, Southern Min, Hakka, Jin Chinese, Hausa,
-              Kannada, Indonesian, Polish, Yoruba, Xiang Chinese, Malayalam,
-              Odia, Maithili, Burmese, Eastern Punjabi, Sunda, Sudanese Arabic,
-              Algerian Arabic, Moroccan Arabic, Ukrainian, Igbo, Northern Uzbek,
-              Sindhi, North Levantine Arabic, Romanian, Tagalog, Dutch, Saʽidi
-              Arabic, Gan Chinese, Amharic, Northern Pashto, Magahi, Thai,
-              Saraiki, Khmer, Chhattisgarhi, Somali, Malaysian, Cebuano, Nepali,
-              Mesopotamian Arabic, Assamese, Sinhalese, Northern Kurdish, Hejazi
-              Arabic, Nigerian Fulfulde, Bavarian, South Azerbaijani, Greek,
-              Chittagonian, Kazakh, Deccan, Hungarian, Kinyarwanda, Zulu, South
-              Levantine Arabic, Tunisian Arabic, Sanaani Spoken Arabic, Northern
-              Min, Southern Pashto, Rundi, Czech, Taʽizzi-Adeni Arabic, Uyghur,
-              Eastern Min, Sylheti
+              All languages Afrikaans, Albanian, Amharic, Arabic, Armenian,
+              Assamese, Azerbaijani, Bangla, Bashkir, Basque, Bosnian,
+              Bulgarian, Cantonese (Traditional), Catalan, Chinese (Literary),
+              Chinese Simplified, Chinese Traditional, Croatian, Czech, Danish,
+              Dari, Divehi, Dutch, English, Estonian, Faroese, Fijian, Filipino,
+              Finnish, French, French (Canada), Galician , Ganda, Georgian,
+              German, Greek, Gujarati, Haitian Creole, Hausa, Hebrew, Hindi,
+              Hmong Daw, Hungarian, Icelandic, Igbo , Indonesian, Inuinnaqtun,
+              Inuktitut, Inuktitut (Latin), Irish , Italian, Japanese, Kannada,
+              Kazakh, Khmer, Kinyarwanda, Klingon (Latin), Konkani, Korean,
+              Kurdish (Central), Kurdish (Northern), Kyrgyz, Lao, Latvian,
+              Lingala, Lithuanian, Lower Sorbian, Macedonian, Maithili,
+              Malagasy, Malay, Malayalam, Maltese, Marathi, Mongolian
+              (Cyrillic), Mongolian (Traditional) , Myanmar (Burmese), Māori,
+              Nepali, Norwegian, Nyanja, Odia, Pashto, Persian, Polish,
+              Portuguese (Brazil), Portuguese (Portugal), Punjabi, Querétaro
+              Otomi, Romanian, Rundi, Russian, Samoan, Serbian (Cyrillic),
+              Serbian (Latin), Sesotho , Sesotho sa Leboa, Setswana, Shona,
+              Sindhi, Sinhala, Slovak , Slovenian, Somali, Spanish, Swahili,
+              Swedish, Tahitian, Tamil, Tatar, Telugu, Thai, Tibetan, Tigrinya,
+              Tongan, Turkish, Turkmen, Ukrainian, Upper Sorbian, Urdu, Uyghur,
+              Uzbek (Latin), Vietnamese, Welsh, Xhosa, Yoruba, Yucatec Maya,
+              Zulu.
             </p>
           )}
         </div>
