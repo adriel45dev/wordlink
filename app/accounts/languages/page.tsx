@@ -1,5 +1,5 @@
 import React from "react";
-import BingSupportedLanguages from "../shared/data/supported.lang";
+import BingSupportedLanguages from "../../shared/data/supported.lang";
 import Image from "next/image";
 
 export default function Languages() {
