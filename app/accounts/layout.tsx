@@ -6,7 +6,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      {children}
+      <main className="flex min-h-full w-full flex-col">{children}</main>
       <Footer />
     </>
   );

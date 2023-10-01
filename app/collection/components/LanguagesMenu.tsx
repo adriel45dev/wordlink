@@ -13,7 +13,7 @@ const LanguagesMenu = () => {
   const { language, setLanguage } = useContext(LanguageContext);
 
   return (
-    <>
+    <div className="relative flex w-full flex-col">
       <button
         type="button"
         className="inline-flex cursor-pointer items-center justify-center rounded-3xl py-1 pl-1 pr-4 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-900 dark:hover:text-white"
@@ -40,7 +40,7 @@ const LanguagesMenu = () => {
       <div
         className={`${
           isEnabled ? "block" : "hidden"
-        } sm:max-w-auto absolute left-0 right-0 top-14 z-50 m-3 min-w-min max-w-full list-none divide-y divide-gray-100 rounded-lg  bg-white text-base shadow dark:bg-gray-700 sm:left-auto sm:right-8`}
+        } sm:max-w-auto absolute right-0 top-14 z-50 min-w-max max-w-full list-none divide-y divide-gray-100 rounded-lg  bg-white text-base shadow dark:bg-gray-700 sm:left-auto`}
       >
         <ul className="py-2 font-medium" role="none">
           {Object.keys(language.languages).map((code, key) => {
@@ -94,7 +94,7 @@ const LanguagesMenu = () => {
           </li>
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 

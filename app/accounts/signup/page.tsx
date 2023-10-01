@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 import { RegAnySpaces } from "@/app/shared/Regex";
 import EyeClosedIcon from "@/public/icons/EyeClosedIcon";
 import EyeOpenIcon from "@/public/icons/EyeOpenIcon";
+import AlertDataType from "@/app/shared/types/alert-data.types";
+import AlertType from "@/app/shared/enums/alert-type.enums";
+import Alert from "@/app/components/Alert";
+const md5 = require("md5");
 
 type CountryType = {
   name: string;
@@ -28,14 +32,48 @@ const DefaultDataCountry: CountryType = {
   alpha: "global",
 };
 
+type isDataFormEmptyType = { [key: string]: boolean };
+
+const DefaultIsDataFormEmpty = {
+  language: true,
+  displaylanguage: true,
+  name: true,
+  email: true,
+  password: true,
+  username: true,
+};
+
 export default function Singup() {
   const [stateDropDownCountries, setStateDropDownCountries] = useState(false);
   const [countries, setCountries] = useState<CountryType[]>([]);
   const [selectedCountry, setSelectedCountry] =
     useState<CountryType>(DefaultDataCountry);
-  const [language, setLanguage] = useState("");
+  const [languageName, setLanguageName] = useState("");
   const [dataForm, setDataForm] = useState<DataFormType>(DefaultDataForm);
   const [showPassword, setShowPassword] = useState(false);
+  const [AlertData, setAlertData] = useState<AlertDataType>({
+    type: AlertType.Success,
+    message: "",
+    display: false,
+  });
+
+  const [dataFormStatus, setDataFormStatus] = useState<isDataFormEmptyType>(
+    DefaultIsDataFormEmpty,
+  );
+
+  const handleIsDataFormEmpty = () => {
+    const isDataEmpty: isDataFormEmptyType = {};
+
+    Object.keys(dataForm).forEach((key) => {
+      if (dataForm[key]) {
+        isDataEmpty[key] = true;
+      } else {
+        isDataEmpty[key] = false;
+      }
+    });
+
+    setDataFormStatus(isDataEmpty);
+  };
 
   useEffect(() => {
     setDataForm((prevDataForm) => ({
@@ -45,10 +83,6 @@ export default function Singup() {
     }));
   }, [dataForm.username, dataForm.password]);
 
-  // (() => {
-  //   setDataForm(prevDataForm => ({...prevDataForm, username: prevDataForm.username}))
-  // })();
-
   const handleForm = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -56,9 +90,8 @@ export default function Singup() {
   ) => {
     const { value, name } = e.target;
 
-    if (value == "language") {
-    }
-
+    setAlertData((alert) => ({ ...alert, display: false }));
+    setDataFormStatus(DefaultIsDataFormEmpty);
     setDataForm((prevData) => ({
       ...prevData,
       [name]: value,
@@ -77,11 +110,11 @@ export default function Singup() {
         username: username,
         name: name,
         email: email,
-        password: password,
+        password: md5(password),
         displaylanguage: displaylanguage,
         languages: {
           [language]: {
-            name: language,
+            name: languageName,
             country: alpha,
           },
         },
@@ -90,7 +123,6 @@ export default function Singup() {
 
     if (dataJSON) {
       const data = JSON.parse(dataJSON);
-      console.log();
 
       if (data[username]) return false;
       const newData = { ...data, ...newuser };
@@ -105,16 +137,34 @@ export default function Singup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (Object.keys(dataForm).some((key) => dataForm[key] === ""))
-      return alert("Empty input!");
-
+    if (Object.keys(dataForm).some((key) => dataForm[key] === "")) {
+      handleIsDataFormEmpty();
+      setAlertData({
+        type: AlertType.Warning,
+        message:
+          "Oops! It looks like you forgot to fill out one of the required fields. Please enter the missing information before sending your request.",
+        display: true,
+      });
+      return;
+    }
     const status = await postUser();
 
     if (!status) {
-      alert("User already exixts");
+      setAlertData({
+        type: AlertType.Warning,
+        message:
+          "The username entered is already in use. If this is your account, please login. Otherwise, try again with different credentials.",
+        display: true,
+      });
       return;
+    } else {
+      setAlertData({
+        type: AlertType.Success,
+        message:
+          "Congratulations! Your registration is now complete. You may proceed to login to your account.",
+        display: true,
+      });
     }
-
     setSelectedCountry(DefaultDataCountry);
     setDataForm(DefaultDataForm);
   };
@@ -130,14 +180,21 @@ export default function Singup() {
     }
     const [data] = BingSupportedLanguages.filter((lang) => lang.code == value);
     const { countries } = data;
-    setLanguage(text);
+    setLanguageName(text);
     setCountries(countries);
     setSelectedCountry(countries[0]);
   };
 
   return (
-    <main className="flex min-h-full w-full flex-1 flex-col items-center bg-slate-900 px-8 pb-16 text-white">
-      <h1 className="my-4 text-4xl font-bold">Sign Up</h1>
+    <main className="flex min-h-screen w-full  flex-col items-center bg-slate-900 px-8 pb-16 text-white">
+      <h1 id="title" className="my-4 text-4xl font-bold">
+        Sign Up
+      </h1>
+      {AlertData.display && (
+        <div className="w-full">
+          <Alert data={{ AlertData, setAlertData }} />
+        </div>
+      )}
       <form className="flex w-full flex-col gap-6">
         {/* Language */}
         <div>
@@ -151,7 +208,11 @@ export default function Singup() {
           <div className="flex flex-row">
             <select
               id="language"
-              className="block h-12 w-full rounded-l-lg border border-l-2 border-gray-300 border-l-gray-100 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:border-l-gray-700 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className={`${
+                dataFormStatus.language
+                  ? "dark:border-gray-600"
+                  : "dark:border-red-600"
+              } block w-full rounded-l-lg border border-l-2 border-gray-300 border-l-gray-100 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
               onChange={(e) => {
                 handleLanguageSelector(e);
                 handleForm(e);
@@ -239,7 +300,11 @@ export default function Singup() {
           <select
             id="displaylanguage"
             name="displaylanguage"
-            className="block h-12 w-full rounded-lg border border-gray-300 border-l-gray-100 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:border-l-gray-700 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className={`${
+              dataFormStatus.displaylanguage
+                ? "dark:border-gray-600"
+                : "dark:border-red-600"
+            } block w-full rounded-lg border  border-gray-300 border-l-gray-100 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
             onChange={(e) => {
               handleLanguageSelector(e);
               handleForm(e);
@@ -271,7 +336,11 @@ export default function Singup() {
             type="text"
             name="name"
             id="name"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className={`${
+              dataFormStatus.name
+                ? "dark:border-gray-600"
+                : "dark:border-red-600"
+            } block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
             placeholder=""
             value={dataForm.name}
             required
@@ -290,7 +359,11 @@ export default function Singup() {
             name="email"
             type="email"
             id="email"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className={`${
+              dataFormStatus.email
+                ? "dark:border-gray-600"
+                : "dark:border-red-600"
+            } block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
             placeholder="name@mail.com"
             value={dataForm.email}
             required
@@ -309,7 +382,11 @@ export default function Singup() {
             name="username"
             type="text"
             id="username"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className={`${
+              dataFormStatus.username
+                ? "dark:border-gray-600"
+                : "dark:border-red-600"
+            } block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
             placeholder="@username"
             value={dataForm.username}
             required
@@ -332,7 +409,11 @@ export default function Singup() {
               type={showPassword ? "text" : "password"}
               id="password"
               name="password"
-              className="block w-full min-w-0 flex-1 rounded-none rounded-l-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+              className={`${
+                dataFormStatus.password
+                  ? "dark:border-gray-600"
+                  : "dark:border-red-600"
+              } block w-full rounded-l-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500  dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
               placeholder=""
             />
             <span
@@ -349,8 +430,8 @@ export default function Singup() {
         </div>
         {/* Submit */}
         <button
-          onClick={handleSubmit}
           type="button"
+          onClick={handleSubmit}
           className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
         >
           Create account

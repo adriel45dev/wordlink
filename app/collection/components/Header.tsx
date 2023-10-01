@@ -4,6 +4,7 @@ import Image from "next/image";
 import LanguagesMenu from "./LanguagesMenu";
 import Link from "next/link";
 import Navbar from "./Navbar";
+import ProfileMenu from "./ProfileMenu";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -27,10 +28,11 @@ const Header = () => {
             />
           </Link>
 
-          <div className="flex items-center md:order-2">
+          <div className="flex items-center gap-2 md:order-2">
             {/* Deve carregar o ultimo idioma estudado */}
 
             <LanguagesMenu />
+            <ProfileMenu />
 
             <button
               data-collapse-toggle="navbar-language"

@@ -1,6 +1,6 @@
 "use client";
 import InfoIcon from "@/public/icons/InfoIcon";
-import React, { useEffect, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import AlertType from "../shared/enums/alert-type.enums";
 import CloseIcon2 from "@/public/icons/CloseIcon2";
 import Link from "next/link";
@@ -30,12 +30,21 @@ type AlertProps = {
   };
 };
 export default function Alert({ data }: AlertProps) {
-  const { type, message, display, link } = data.AlertData;
+  let { type, message, display, link } = data.AlertData;
   const setAlertData = data.setAlertData;
+
+  const elementRef: RefObject<HTMLDivElement> = useRef(null);
+
+  useEffect(() => {
+    elementRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     display && (
       <div
+        ref={elementRef}
         id="alert"
         className={`mb-4 flex w-full items-center rounded-lg bg-gray-800 p-4 ${AlertStyleType[type]}`}
         role="alert"
