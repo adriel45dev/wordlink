@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         <Link
-          href={"/collection/library"}
+          href={user ? "/collection/library" : "/accounts/signup"}
           className="mb-6 inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
         >
           Start now
