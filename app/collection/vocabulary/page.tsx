@@ -1,28 +1,33 @@
 "use client";
-import { LanguageContext } from "@/app/context/LanguageContext";
 import { NavbarContext } from "@/app/context/NavbarContext";
 import React, { useContext, useEffect, useState } from "react";
 import Table from "./components/Table";
-import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
+import NoUserLogged from "@/app/components/NoUserLogged";
+import { UserContext } from "@/app/context/UserContext";
 
 export default function Vocabulary() {
   const { setTab } = useContext(NavbarContext);
-  const { language } = useContext(LanguageContext);
   const [vocabulary, setVocabulary] = useState<{
     [key: string]: { des: string[]; state: string };
   }>({});
+  const { user } = useContext(UserContext);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("vocabulary"), []);
 
   useEffect(() => {
+    if (!user) return;
+    const { language_key, username } = user;
     const dataJSON = localStorage.getItem(
-      `${LanguageCodeReference[language.selected]}_vocabulary`,
+      `${language_key}_${username}_vocabulary`,
     );
+
     if (dataJSON) {
       setVocabulary(JSON.parse(dataJSON));
     }
-  }, [language]);
+  }, [user]);
+
+  if (!user) return <NoUserLogged />;
 
   return (
     <>

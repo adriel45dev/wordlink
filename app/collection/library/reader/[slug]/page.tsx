@@ -20,6 +20,8 @@ import {
 import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
 import { LanguageContext } from "@/app/context/LanguageContext";
 import PostDataType from "@/app/shared/types/post-data-types";
+import { UserContext } from "@/app/context/UserContext";
+import NoUserLogged from "@/app/components/NoUserLogged";
 
 enum WordLinkVisualStyle {
   IGNORE = "",
@@ -32,7 +34,9 @@ enum WordLinkVisualStyle {
 }
 
 export default function Reader({ params }: { params: { slug: string } }) {
-  const { language } = useContext(LanguageContext);
+  // const { language } = useContext(LanguageContext);
+
+  const { user } = useContext(UserContext);
 
   const [data, setData] = useState<TWord[]>([]);
 
@@ -43,18 +47,23 @@ export default function Reader({ params }: { params: { slug: string } }) {
   const [activeLink, setActiveLink] = useState<TActiveLink>();
 
   const getState = () => {
+    if (!user) return;
+    const { target_code, country_code } = user.currentlanguage;
+    const { username } = user;
     const dataJSON = localStorage.getItem(
-      `${LanguageCodeReference[language.selected]}_vocabulary`,
+      `${target_code}_${country_code}_${username}_vocabulary`,
     );
+
     if (dataJSON) {
       setlistWordsLink(JSON.parse(dataJSON));
     }
   };
 
   const getData = () => {
-    const dataJSON = localStorage.getItem(
-      `${LanguageCodeReference[language.selected]}_posts`,
-    );
+    if (!user) return;
+    const { target_code, country_code } = user.currentlanguage;
+    const { username, language_key } = user;
+    const dataJSON = localStorage.getItem(`${language_key}_${username}_posts`);
     if (dataJSON) {
       const posts = JSON.parse(dataJSON);
       if (posts[params.slug]) {
@@ -166,13 +175,17 @@ export default function Reader({ params }: { params: { slug: string } }) {
     getState();
     getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  }, [user]);
 
   useEffect(() => {
     if (!cardData) return;
 
+    if (!user) return;
+    const { target_code, country_code } = user.currentlanguage;
+    const { username, language_key } = user;
+
     localStorage.setItem(
-      `${LanguageCodeReference[language.selected]}_vocabulary`,
+      `${language_key}_${username}_vocabulary`,
       JSON.stringify(listWordsLink),
     );
 
@@ -180,10 +193,11 @@ export default function Reader({ params }: { params: { slug: string } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listWordsLink, cardData]);
 
-  return cardData &&
-    cardData.language == LanguageCodeReference[language.selected] ? (
-    <section className="flex flex-1 flex-col md:flex-row">
-      <div className="flex w-full flex-1 flex-col items-center pb-6">
+  if (!user) return <NoUserLogged />;
+
+  return user && cardData && cardData.language == user.language_key ? (
+    <section className="flex w-full flex-1 flex-col md:flex-row">
+      <div className="flex min-w-full flex-1 flex-col items-center  pb-6">
         {/* HEADING CARD  */}
         <Heading slug={cardData.title} image={cardData.image} />
 

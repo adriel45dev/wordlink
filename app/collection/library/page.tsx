@@ -6,6 +6,9 @@ import LibrarySection from "./components/LibrarySection";
 import { NavbarContext } from "@/app/context/NavbarContext";
 import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
 import { LanguageContext } from "@/app/context/LanguageContext";
+import { UserContext } from "@/app/context/UserContext";
+import NoUserLogged from "@/app/components/NoUserLogged";
+import { useRouter } from "next/navigation";
 
 type DataType = {
   title: string;
@@ -18,24 +21,38 @@ type DataType = {
 
 export default function Learn() {
   const [data, setData] = useState<{ [id: string]: DataType }>({});
-  const { language } = useContext(LanguageContext);
+  // const { language } = useContext(LanguageContext);
+  const { user } = useContext(UserContext);
 
   const { setTab } = useContext(NavbarContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("library"), []);
 
   useEffect(() => {
+    if (!user) return;
+    const { target_code, country_code } = user.currentlanguage;
+    const { username } = user;
     const dataJSON = localStorage.getItem(
-      `${LanguageCodeReference[language.selected]}_posts`,
+      `${target_code}_${country_code}_${username}_posts`,
     );
     if (dataJSON) {
       setData(JSON.parse(dataJSON));
     } else {
       setData({});
     }
-  }, [language]);
+  }, [user]);
 
-  useEffect;
+  console.log(user);
+
+  // redirect
+  const router = useRouter();
+  useEffect(() => {
+    if (!localStorage.getItem("connected_user")) {
+      router.push("/accounts/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <h1 className="my-6 text-4xl font-bold text-white">Library</h1>

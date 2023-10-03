@@ -1,6 +1,7 @@
 "use client";
 import { LanguageMenuContext } from "@/app/context/LanguageMenuContext";
 import { ProfileMenuContext } from "@/app/context/ProfileMenuContext";
+import { UserContext } from "@/app/context/UserContext";
 import DownArrow from "@/public/icons/DownArrow";
 import PauseIcon from "@/public/icons/PauseIcon";
 import ProfileIcon from "@/public/icons/ProfileIcon";
@@ -12,6 +13,7 @@ const ProfileMenu = () => {
   // const [isEnabled, setIsEnabled] = useState(false);
   const { isProfileMenu, setIsProfileMenu } = useContext(ProfileMenuContext);
   const { setIsLanguageMenu } = useContext(LanguageMenuContext);
+  const { user } = useContext(UserContext);
 
   return (
     <>
@@ -37,19 +39,31 @@ const ProfileMenu = () => {
         >
           <li>
             <Link
+              href={"/collection/profile"}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white "
+              role="menuitem"
+              onClick={() => setIsProfileMenu(!isProfileMenu)}
+            >
+              <div className="inline-flex flex-row items-center justify-center gap-2">
+                <ProfileIcon className="h-4 w-4" />
+                <span>{user?.username}</span>
+              </div>
+            </Link>
+          </li>
+          <div className="my-2 border-t-2 dark:border-gray-600"></div>
+          <li>
+            <Link
               href={"/"}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white "
               role="menuitem"
               onClick={() => setIsProfileMenu(!isProfileMenu)}
             >
-              <div className="inline-flex flex-row items-center  justify-center gap-2">
+              <div className="inline-flex flex-row items-center justify-center gap-2">
                 <TurnOffIcon className="h-4 w-4" />
                 <span>Log out</span>
               </div>
             </Link>
           </li>
-
-          <div className="my-2 border-t-2 dark:border-gray-600"></div>
         </ul>
       </div>
     </>

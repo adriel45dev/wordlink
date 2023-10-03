@@ -1,19 +1,37 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useContext } from "react";
-import { LanguageContext } from "@/app/context/LanguageContext";
-import {
-  Language,
-  LanguageCode,
-  LanguageCodeReference,
-} from "@/app/shared/enums/language-code-type";
+import React, { useContext } from "react";
+
 import { LanguageMenuContext } from "@/app/context/LanguageMenuContext";
 import { ProfileMenuContext } from "@/app/context/ProfileMenuContext";
+import { UserContext } from "@/app/context/UserContext";
 
 const LanguagesMenu = () => {
-  const { language, setLanguage } = useContext(LanguageContext);
   const { isLanguageMenu, setIsLanguageMenu } = useContext(LanguageMenuContext);
   const { setIsProfileMenu } = useContext(ProfileMenuContext);
+  const { user, setUser } = useContext(UserContext);
+
+  const handleLanguageChange = (
+    name: string,
+    country_code: string,
+    target_code: string,
+  ) => {
+    if (!user) return;
+    setUser({
+      ...user,
+      ...{
+        currentlanguage: {
+          ...user.currentlanguage,
+          ...{
+            name,
+            country_code,
+            target_code,
+          },
+        },
+        language_key: `${target_code}_${country_code}`,
+      },
+    });
+  };
 
   return (
     <div className="flex w-full flex-col ">
@@ -25,15 +43,17 @@ const LanguagesMenu = () => {
           setIsProfileMenu(false);
         }}
       >
-        <Image
-          src={`/images/flags/${language.selected}.svg`}
-          alt="Flag Icon"
-          className="mr-2 rounded-full hover:scale-105"
-          width={32}
-          height={32}
-        />
+        {user && (
+          <Image
+            src={`/images/flags/${user?.currentlanguage.country_code}.svg`}
+            alt="Flag Icon"
+            className="mr-2 rounded-full hover:scale-105"
+            width={32}
+            height={32}
+          />
+        )}
 
-        {LanguageCodeReference[language.selected]}
+        {user?.currentlanguage.name}
 
         <Image
           src={"/images/dropdown-arrow.svg"}
@@ -53,35 +73,33 @@ const LanguagesMenu = () => {
           className="w-full rounded-lg bg-gray-700 py-2 font-medium"
           role="none"
         >
-          {Object.keys(language.languages).map((code, key) => {
-            const lang_description = language.languages[code];
-
-            return (
-              <li
-                key={key}
-                onClick={() =>
-                  setLanguage({ ...language, selected: code as LanguageCode })
-                }
-              >
-                <a
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white "
-                  role="menuitem"
-                  onClick={() => setIsLanguageMenu(!isLanguageMenu)}
+          {user &&
+            Object.keys(user.languages).map((key_code, key) => {
+              const { name, country, code } = user.languages[key_code];
+              return (
+                <li
+                  key={key}
+                  onClick={() => handleLanguageChange(name, country, code)}
                 >
-                  <div className="inline-flex items-center ">
-                    <Image
-                      src={`/images/flags/${code}.svg`}
-                      alt="Flag Icon"
-                      className="mr-2 h-5 w-5 rounded-full"
-                      width={14}
-                      height={14}
-                    />
-                    {lang_description}
-                  </div>
-                </a>
-              </li>
-            );
-          })}
+                  <a
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white "
+                    role="menuitem"
+                    onClick={() => setIsLanguageMenu(!isLanguageMenu)}
+                  >
+                    <div className="inline-flex items-center ">
+                      <Image
+                        src={`/images/flags/${country}.svg`}
+                        alt="Flag Icon"
+                        className="mr-2 h-5 w-5 rounded-full"
+                        width={14}
+                        height={14}
+                      />
+                      {name}
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
 
           <div className="my-2 border-t-2 dark:border-gray-600"></div>
           <li>

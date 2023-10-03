@@ -10,14 +10,15 @@ import crypto from "crypto";
 import AlertDataType from "@/app/shared/types/alert-data.types";
 import PostDataType from "@/app/shared/types/post-data-types";
 import { NavbarContext } from "@/app/context/NavbarContext";
-import { LanguageContext } from "@/app/context/LanguageContext";
-import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
+
+import { UserContext } from "@/app/context/UserContext";
+import NoUserLogged from "@/app/components/NoUserLogged";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export default function Add() {
   const { setTab } = useContext(NavbarContext);
-  const { language } = useContext(LanguageContext);
+  // const { language } = useContext(LanguageContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("add"), []);
 
@@ -41,23 +42,25 @@ export default function Add() {
 
   const [data, setData] = useState<{ [id: string]: PostDataType }>({});
 
+  const { user } = useContext(UserContext);
+
   useEffect(() => {
-    const dataJSON = localStorage.getItem(
-      `${LanguageCodeReference[language.selected]}_posts`,
-    );
+    if (!user) return;
+    const { language_key, username } = user;
+    const dataJSON = localStorage.getItem(`${language_key}_${username}_posts`);
     if (dataJSON) {
       setData(JSON.parse(dataJSON));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   useEffect(() => {
+    if (!user) return;
+    const { language_key, username } = user;
+
     if (data) {
       const dataJSON = JSON.stringify(data);
-      localStorage.setItem(
-        `${LanguageCodeReference[language.selected]}_posts`,
-        dataJSON,
-      );
+      localStorage.setItem(`${language_key}_${username}_posts`, dataJSON);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -130,6 +133,8 @@ export default function Add() {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
+    // const { target_code, country_code } = user.currentlanguage;
 
     if (!isValidInputData()) return;
 
@@ -143,13 +148,15 @@ export default function Add() {
       ...input,
       id,
       image,
-      language: LanguageCodeReference[language.selected],
+      language: user.language_key,
     };
 
     setData((prevData) => ({ ...prevData, [id]: newData }));
 
     postSuccess(id);
   };
+
+  if (!user) return <NoUserLogged />;
 
   return (
     <>

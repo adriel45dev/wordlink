@@ -1,21 +1,19 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Flags from "./components/Flags";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "./components/MainHeader";
 import Footer from "./components/Footer";
-import { POST_CARDS } from "./config";
+import ArrowRightIcon from "@/public/icons/ArrowRightIcon";
 
 export default function Home() {
   const [flags, setFlags] = useState(false);
+  const [user, setUser] = useState(false);
 
   useEffect(() => {
-    const languages = ["English", "Portuguese"];
-    const dataJSON = localStorage.getItem("English_posts");
-    if (!dataJSON) {
-      localStorage.setItem("English_posts", JSON.stringify(POST_CARDS));
-    }
+    const dataJSON = localStorage.getItem("connected_user");
+    if (dataJSON) return setUser(true);
   }, []);
 
   return (
@@ -70,25 +68,11 @@ export default function Home() {
         </div>
 
         <Link
-          href="/collection/library"
+          href={"/collection/library"}
           className="mb-6 inline-flex items-center justify-center rounded-lg bg-blue-700 px-5 py-3 text-center text-base font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
         >
           Start now
-          <svg
-            className="ml-2 h-3.5 w-3.5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 14 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 5h12m0 0L9 1m4 4L9 9"
-            />
-          </svg>
+          <ArrowRightIcon className="h-6 w-6" />
         </Link>
       </main>
       <Footer />

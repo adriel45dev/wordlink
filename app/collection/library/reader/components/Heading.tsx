@@ -8,7 +8,7 @@ type CardHeadingProps = {
 
 export default function Heading({ slug, image }: CardHeadingProps) {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex min-w-full flex-col">
       <div className="relative h-36 w-full ">
         <Image
           src={`${image}` || "/images/card/default.jpg"}

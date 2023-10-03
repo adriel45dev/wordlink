@@ -105,6 +105,8 @@ export default function Singup() {
       dataForm;
     const { alpha } = selectedCountry;
 
+    console.log(language, alpha, username);
+
     const newuser = {
       [username]: {
         username: username,
@@ -113,11 +115,25 @@ export default function Singup() {
         password: md5(password),
         displaylanguage: displaylanguage,
         languages: {
-          [language]: {
+          [`${language}_${alpha}`]: {
             name: languageName,
+            code: language,
             country: alpha,
           },
+          // Dummy Data
+          ["pt_br"]: {
+            name: "Portuguese",
+            code: "pt",
+            country: "br",
+          },
         },
+        currentlanguage: {
+          name: languageName,
+          country_code: alpha,
+          target_code: language,
+          display_code: displaylanguage,
+        },
+        language_key: `${language}_${alpha}`,
       },
     };
 
@@ -305,10 +321,7 @@ export default function Singup() {
                 ? "dark:border-gray-600"
                 : "dark:border-red-600"
             } block w-full rounded-lg border  border-gray-300 border-l-gray-100 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500`}
-            onChange={(e) => {
-              handleLanguageSelector(e);
-              handleForm(e);
-            }}
+            onChange={handleForm}
             value={dataForm.displaylanguage}
           >
             <option value="">Choose your language</option>
