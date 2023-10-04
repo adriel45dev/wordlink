@@ -118,12 +118,6 @@ export default function Singup() {
             code: language,
             country: alpha,
           },
-          // Dummy Data
-          ["pt_br"]: {
-            name: "Portuguese",
-            code: "pt",
-            country: "br",
-          },
         },
         currentlanguage: {
           name: languageName,
