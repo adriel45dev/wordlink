@@ -9,6 +9,7 @@ import { LanguageContext } from "@/app/context/LanguageContext";
 import { UserContext } from "@/app/context/UserContext";
 import NoUserLogged from "@/app/components/NoUserLogged";
 import { useRouter } from "next/navigation";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 
 type DataType = {
   title: string;
@@ -23,13 +24,14 @@ export default function Learn() {
   const [data, setData] = useState<{ [id: string]: DataType }>({});
   // const { language } = useContext(LanguageContext);
   const { user } = useContext(UserContext);
+  const { isUser } = useContext(UserLogginContext);
 
   const { setTab } = useContext(NavbarContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("library"), []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isUser) return;
     const { target_code, country_code } = user.currentlanguage;
     const { username } = user;
     const dataJSON = localStorage.getItem(
@@ -40,18 +42,10 @@ export default function Learn() {
     } else {
       setData({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  console.log(user);
-
-  // redirect
-  const router = useRouter();
-  useEffect(() => {
-    if (!localStorage.getItem("connected_user")) {
-      router.push("/accounts/login");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (!isUser) return <></>;
 
   return (
     <>

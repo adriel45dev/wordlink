@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Table from "./components/Table";
 import NoUserLogged from "@/app/components/NoUserLogged";
 import { UserContext } from "@/app/context/UserContext";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 
 export default function Vocabulary() {
   const { setTab } = useContext(NavbarContext);
@@ -11,12 +12,13 @@ export default function Vocabulary() {
     [key: string]: { des: string[]; state: string };
   }>({});
   const { user } = useContext(UserContext);
+  const { isUser } = useContext(UserLogginContext);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setTab("vocabulary"), []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isUser) return;
     const { language_key, username } = user;
     const dataJSON = localStorage.getItem(
       `${language_key}_${username}_vocabulary`,
@@ -24,10 +26,11 @@ export default function Vocabulary() {
 
     if (dataJSON) {
       setVocabulary(JSON.parse(dataJSON));
+    } else {
+      setVocabulary({});
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
-
-  if (!user) return <NoUserLogged />;
 
   return (
     <>

@@ -2,18 +2,18 @@
 import { LanguageMenuContext } from "@/app/context/LanguageMenuContext";
 import { ProfileMenuContext } from "@/app/context/ProfileMenuContext";
 import { UserContext } from "@/app/context/UserContext";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 import DownArrow from "@/public/icons/DownArrow";
-import PauseIcon from "@/public/icons/PauseIcon";
 import ProfileIcon from "@/public/icons/ProfileIcon";
 import TurnOffIcon from "@/public/icons/TurnOffIcon";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 const ProfileMenu = () => {
-  // const [isEnabled, setIsEnabled] = useState(false);
   const { isProfileMenu, setIsProfileMenu } = useContext(ProfileMenuContext);
   const { setIsLanguageMenu } = useContext(LanguageMenuContext);
   const { user } = useContext(UserContext);
+  const { setIsUser } = useContext(UserLogginContext);
 
   return (
     <>
@@ -56,7 +56,10 @@ const ProfileMenu = () => {
               href={"/"}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white "
               role="menuitem"
-              onClick={() => setIsProfileMenu(!isProfileMenu)}
+              onClick={() => {
+                setIsProfileMenu(!isProfileMenu);
+                setIsUser(false);
+              }}
             >
               <div className="inline-flex flex-row items-center justify-center gap-2">
                 <TurnOffIcon className="h-4 w-4" />

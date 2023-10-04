@@ -10,17 +10,13 @@ import crypto from "crypto";
 import AlertDataType from "@/app/shared/types/alert-data.types";
 import PostDataType from "@/app/shared/types/post-data-types";
 import { NavbarContext } from "@/app/context/NavbarContext";
-
 import { UserContext } from "@/app/context/UserContext";
-import NoUserLogged from "@/app/components/NoUserLogged";
 
 const ACCESS_KEY = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
 
 export default function Add() {
   const { setTab } = useContext(NavbarContext);
-  // const { language } = useContext(LanguageContext);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => setTab("add"), []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -64,6 +60,8 @@ export default function Add() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
+
+  useEffect(() => setTab("add"), [setTab]);
 
   async function fetchImage(query: string) {
     const response = await fetch(
@@ -155,8 +153,6 @@ export default function Add() {
 
     postSuccess(id);
   };
-
-  if (!user) return <NoUserLogged />;
 
   return (
     <>

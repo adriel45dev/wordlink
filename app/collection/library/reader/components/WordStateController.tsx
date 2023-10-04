@@ -1,7 +1,9 @@
+"use client";
+
 import CheckIcon from "@/public/icons/CheckIcon";
 import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
-import React from "react";
+import React, { useContext } from "react";
 import ButtonWordState from "./ButtonWordState";
 import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
@@ -9,6 +11,7 @@ import TActiveLink from "@/app/shared/types/active-link.types";
 import InputDescription from "./InputDescription";
 import Player from "@/app/components/Player";
 import MobileIframe from "@/app/components/MobileIframe";
+import { UserContext } from "@/app/context/UserContext";
 
 type WordStateControllerProps = {
   text: TWord;
@@ -25,6 +28,11 @@ export default function WordStateController({
   activeLink,
   text,
 }: WordStateControllerProps) {
+  const { user } = useContext(UserContext);
+
+  if (!user) return <></>;
+  const { target_code, display_code } = user.currentlanguage;
+
   return (
     <div className="my-2 min-w-full flex-1 rounded-2xl">
       <div className="relative flex w-full flex-col rounded-2xl border border-slate-700 px-4">
@@ -113,8 +121,14 @@ export default function WordStateController({
           </ButtonWordState>
         </div>
 
+        {/* ${encodeURIComponent( */}
+
         <div className="flex w-full flex-wrap items-center justify-center p-4">
-          <MobileIframe url="https://www.bing.com/translator?from=en&to=pt&text=world" />
+          <MobileIframe
+            url={`https://www.bing.com/translator?from=${encodeURIComponent(
+              target_code,
+            )}&to=${encodeURIComponent(display_code)}&text=${text.word}`}
+          />
         </div>
       </div>
     </div>

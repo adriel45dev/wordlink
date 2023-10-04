@@ -1,5 +1,5 @@
-import Footer from "./components/Footer";
-import Header from "./components/MainHeader";
+import { UserContext, UserContextProvider } from "./context/UserContext";
+import { UserLogginProvider } from "./context/UserLoggingContext";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -17,11 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col">
-        {/* Header */}
-        {/* <Header /> */}
-        {children}
-        {/* Footer */}
-        {/* <Footer /> */}
+        <UserContextProvider>
+          <UserLogginProvider>{children}</UserLogginProvider>
+        </UserContextProvider>
       </body>
     </html>
   );

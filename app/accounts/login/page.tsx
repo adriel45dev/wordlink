@@ -5,8 +5,11 @@ import AlertType from "@/app/shared/enums/alert-type.enums";
 import AlertDataType from "@/app/shared/types/alert-data.types";
 import EyeClosedIcon from "@/public/icons/EyeClosedIcon";
 import EyeOpenIcon from "@/public/icons/EyeOpenIcon";
-import { useState } from "react";
+import { useContext, useState } from "react";
 const md5 = require("md5");
+import { useRouter } from "next/navigation";
+import { UserContext } from "@/app/context/UserContext";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 
 export default function Login() {
   const [AlertData, setAlertData] = useState<AlertDataType>({
@@ -20,7 +23,9 @@ export default function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const { setIsUser } = useContext(UserLogginContext);
 
+  const router = useRouter();
   const getUsers = async () => {
     const dataJSON = localStorage.getItem("users");
     if (dataJSON) {
@@ -29,8 +34,9 @@ export default function Login() {
     return false;
   };
 
-  const postConnectedUser = (user: { [key: string]: string }) => {
+  const postConnectedUser = async (user: { [key: string]: string }) => {
     localStorage.setItem("connected_user", JSON.stringify(user));
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,13 +89,16 @@ export default function Login() {
         display: true,
       });
 
-    postConnectedUser(dataUser);
+    await postConnectedUser(dataUser);
 
-    return setAlertData({
+    setAlertData({
       type: AlertType.Success,
       message: "You are now logged into your account. Enjoy your time with us.",
       display: true,
     });
+
+    setIsUser(true);
+    return router.push("/collection/library");
   };
 
   const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {

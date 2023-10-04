@@ -17,11 +17,9 @@ import {
   RegSymbolsEdge,
   RegNumbers,
 } from "@/app/shared/Regex";
-import { LanguageCodeReference } from "@/app/shared/enums/language-code-type";
-import { LanguageContext } from "@/app/context/LanguageContext";
+
 import PostDataType from "@/app/shared/types/post-data-types";
 import { UserContext } from "@/app/context/UserContext";
-import NoUserLogged from "@/app/components/NoUserLogged";
 
 enum WordLinkVisualStyle {
   IGNORE = "",
@@ -192,8 +190,6 @@ export default function Reader({ params }: { params: { slug: string } }) {
     setData(mapWords(cardData.text));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listWordsLink, cardData]);
-
-  if (!user) return <NoUserLogged />;
 
   return user && cardData && cardData.language == user.language_key ? (
     <section className="flex w-full flex-1 flex-col md:flex-row">

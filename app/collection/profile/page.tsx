@@ -1,10 +1,11 @@
+"use client";
 import NoUserLogged from "@/app/components/NoUserLogged";
-import { UserContext } from "@/app/context/UserContext";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 import { useContext } from "react";
 
 export default function Profile() {
-  const { user } = useContext(UserContext);
-  if (!user) return <NoUserLogged />;
+  const { isUser } = useContext(UserLogginContext);
+  if (!isUser) return <NoUserLogged />;
 
   return (
     <div className="my-4 flex w-full flex-row items-center justify-center text-4xl text-white">

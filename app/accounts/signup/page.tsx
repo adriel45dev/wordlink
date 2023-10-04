@@ -105,8 +105,6 @@ export default function Singup() {
       dataForm;
     const { alpha } = selectedCountry;
 
-    console.log(language, alpha, username);
-
     const newuser = {
       [username]: {
         username: username,

@@ -4,8 +4,13 @@ import LanguagesMenu from "./LanguagesMenu";
 import Link from "next/link";
 import Navbar from "./Navbar";
 import ProfileMenu from "./ProfileMenu";
+import { useContext } from "react";
+import { UserLogginContext } from "@/app/context/UserLoggingContext";
 
 const Header = () => {
+  const { isUser } = useContext(UserLogginContext);
+  if (!isUser) return <></>;
+
   return (
     <header className="relative w-full">
       <nav className=" border-gray-200 bg-gray-950">
