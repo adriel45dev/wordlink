@@ -2,6 +2,8 @@ Here is an expanded README for WordLink Languages:
 
 # WordLink Languages
 
+![Alt text](/public/images/logo.svg)
+
 WordLink Languages is an innovative online platform for learning new languages easily and effectively.
 
 ## About
