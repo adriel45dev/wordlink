@@ -3,7 +3,7 @@ Here is an expanded README for WordLink Languages:
 # WordLink Languages
 
 <p align="center">
-  <img src="/public/images/logo.svg" width="400">
+  <img src="/public/images/logo.svg" width="200">
 </p>
 
 WordLink Languages is an innovative online platform for learning new languages easily and effectively.
