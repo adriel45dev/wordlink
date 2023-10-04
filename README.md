@@ -6,6 +6,17 @@ Here is an expanded README for WordLink Languages:
   <img src="/public/images/logo.svg" width="200">
 </p>
 
+<p align="center">
+  <img src="/public/images/flags/br.svg" width="50">
+  <img src="/public/images/flags/us.svg" width="50">
+  <img src="/public/images/flags/cn.svg" width="50">
+  <img src="/public/images/flags/ru.svg" width="50">
+  <img src="/public/images/flags/kr.svg" width="50">
+  <img src="/public/images/flags/de.svg" width="50">
+  <img src="/public/images/flags/es.svg" width="50">
+  <img src="/public/images/flags/in.svg" width="50">
+  <img src="/public/images/flags/it.svg" width="50">
+</p>
 WordLink Languages is an innovative online platform for learning new languages easily and effectively.
 
 ## About
