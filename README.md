@@ -10,7 +10,6 @@ Here is an expanded README for WordLink Languages:
   <img src="/public/images/flags/br.svg" width="30">
   <img src="/public/images/flags/us.svg" width="30">
   <img src="/public/images/flags/cn.svg" width="30">
-  <img src="/public/images/flags/ru.svg" width="30">
   <img src="/public/images/flags/kr.svg" width="30">
   <img src="/public/images/flags/de.svg" width="30">
   <img src="/public/images/flags/es.svg" width="30">
