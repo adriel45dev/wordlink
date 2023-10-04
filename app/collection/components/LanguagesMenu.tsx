@@ -5,6 +5,7 @@ import React, { useContext } from "react";
 import { LanguageMenuContext } from "@/app/context/LanguageMenuContext";
 import { ProfileMenuContext } from "@/app/context/ProfileMenuContext";
 import { UserContext } from "@/app/context/UserContext";
+import Link from "next/link";
 
 const LanguagesMenu = () => {
   const { isLanguageMenu, setIsLanguageMenu } = useContext(LanguageMenuContext);
@@ -103,8 +104,8 @@ const LanguagesMenu = () => {
 
           <div className="my-2 border-t-2 dark:border-gray-600"></div>
           <li>
-            <a
-              href="#"
+            <Link
+              href="/collection/add/language"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
               role="menuitem"
             >
@@ -118,7 +119,7 @@ const LanguagesMenu = () => {
                 />
                 Add a new language
               </div>
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

@@ -8,8 +8,8 @@ import { useContext } from "react";
 import { UserLogginContext } from "@/app/context/UserLoggingContext";
 
 const Header = () => {
-  const { isUser } = useContext(UserLogginContext);
-  if (!isUser) return <></>;
+  // const { isUser } = useContext(UserLogginContext);
+  // if (!isUser) return <></>;
 
   return (
     <header className="relative w-full">
