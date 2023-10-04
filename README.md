@@ -16,6 +16,7 @@ Here is an expanded README for WordLink Languages:
   <img src="/public/images/flags/in.svg" width="30">
   <img src="/public/images/flags/it.svg" width="30">
   <img src="/public/images/flags/fr.svg" width="30">
+  <img src="/public/images/flags/tlh.svg" width="30">
 </p>
 WordLink Languages is an innovative online platform for learning new languages easily and effectively.
 
