@@ -5,20 +5,23 @@ import { LanguageContextProvider } from "../context/LanguageContext";
 import { LanguageMenuContextProvider } from "../context/LanguageMenuContext";
 import { ProfileMenuContextProvider } from "../context/ProfileMenuContext";
 import { UserContextProvider } from "../context/UserContext";
+import { UserLogginProvider } from "../context/UserLoggingContext";
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <LanguageContextProvider>
-      <NavbarContextProvider>
-        <LanguageMenuContextProvider>
-          <ProfileMenuContextProvider>
-            <Header />
-            <main className="flex min-h-screen flex-1 flex-col items-center bg-slate-900">
-              {children}
-            </main>
-          </ProfileMenuContextProvider>
-        </LanguageMenuContextProvider>
-      </NavbarContextProvider>
-    </LanguageContextProvider>
+    <UserLogginProvider>
+      <LanguageContextProvider>
+        <NavbarContextProvider>
+          <LanguageMenuContextProvider>
+            <ProfileMenuContextProvider>
+              <Header />
+              <main className="flex min-h-screen flex-1 flex-col items-center bg-slate-900">
+                {children}
+              </main>
+            </ProfileMenuContextProvider>
+          </LanguageMenuContextProvider>
+        </NavbarContextProvider>
+      </LanguageContextProvider>
+    </UserLogginProvider>
   );
 }

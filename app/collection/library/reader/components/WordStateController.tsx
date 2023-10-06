@@ -3,7 +3,7 @@
 import CheckIcon from "@/public/icons/CheckIcon";
 import CloseIcon from "@/public/icons/CloseIcon";
 import TrashIcon from "@/public/icons/TrashIcon";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import ButtonWordState from "./ButtonWordState";
 import WordLinkType from "@/app/shared/enums/word-link-type.enums";
 import TWord from "@/app/shared/types/word.types";
@@ -29,9 +29,16 @@ export default function WordStateController({
   text,
 }: WordStateControllerProps) {
   const { user } = useContext(UserContext);
+  const [translator, setTranslator] = useState("bing");
 
   if (!user) return <></>;
   const { target_code, display_code } = user.currentlanguage;
+
+  const handleTranslator = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    console.log(value);
+    setTranslator(value);
+  };
 
   return (
     <div className="my-2 min-w-full flex-1 rounded-2xl">
@@ -123,11 +130,47 @@ export default function WordStateController({
 
         {/* ${encodeURIComponent( */}
 
+        <div className="w-full p-4">
+          <label htmlFor="translator_select" className="sr-only">
+            Translator select
+          </label>
+          <select
+            value={translator}
+            onChange={handleTranslator}
+            id="translator_select"
+            className="peer block w-full appearance-none space-x-2 border-0 border-b-2 border-gray-200  bg-transparent px-0 py-2.5 text-sm text-gray-500 focus:border-gray-200 focus:outline-none focus:ring-0 dark:border-gray-700 dark:text-gray-400"
+          >
+            <option value="bing" className="bg-slate-800 text-white ">
+              Bing Translate
+            </option>
+            <option value="linguee" className="bg-slate-800 text-white">
+              Linguee
+            </option>
+            <option value="reverso" className="bg-slate-800 text-white">
+              Reverso Translate
+            </option>
+            <option value="context" className="bg-slate-800 text-white">
+              Reverso Context
+            </option>
+            <option value="google" className="bg-slate-800 text-white">
+              Google Translate
+            </option>
+            <option value="deepl" className="bg-slate-800 text-white">
+              Deepl Translate
+            </option>
+
+            <option value="yandex" className="bg-slate-800 text-white">
+              Yandex Translate
+            </option>
+          </select>
+        </div>
+
         <div className="flex w-full flex-wrap items-center justify-center p-4">
           <MobileIframe
-            url={`https://www.bing.com/translator?from=${encodeURIComponent(
-              target_code,
-            )}&to=${encodeURIComponent(display_code)}&text=${text.word}`}
+            from={target_code}
+            to={display_code}
+            text={text.word}
+            translator={translator}
           />
         </div>
       </div>

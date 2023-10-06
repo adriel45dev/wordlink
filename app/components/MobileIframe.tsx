@@ -1,380 +1,142 @@
 "use client";
-import React from "react";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
 
 interface MobileIframeProps {
-  url: string;
+  from: string;
+  to: string;
+  text: string;
+  translator: string;
 }
 
-enum translators {
-  Bing,
-}
+const Linguee: { [key: string]: string } = {
+  ["en"]: "english",
+  ["de"]: "german",
+  ["fr"]: "french",
+  ["es"]: "spanish",
+  ["zh"]: "chinese",
+  ["ru"]: "russian",
+  ["ja"]: "japanese",
+  ["pt"]: "portuguese",
+  ["it"]: "italian",
+  ["nl"]: "dutch",
+  ["pl"]: "polish",
+  ["sv"]: "swedish",
+  ["da"]: "danish",
+  ["fi"]: "finnish",
+  ["el"]: "greek",
+  ["cs"]: "czech",
+  ["ro"]: "romanian",
+  ["hu"]: "hungarian",
+  ["sk"]: "slovak",
+  ["bg"]: "bulgarian",
+  ["sl"]: "slovene",
+  ["lt"]: "lithuanian",
+  ["lv"]: "latvian",
+  ["et"]: "estonian",
+  ["mt"]: "maltese",
+};
 
-const BingSupportedLanguages = [
-  {
-    lang: "All languages Afrikaans",
-    code: "af",
-    countries: ["South Africa", "Namibia"],
-  },
-  {
-    lang: "Albanian",
-    code: "sq",
-    countries: ["Albania", "Kosovo", "North Macedonia"],
-  },
-  { lang: "Amharic", code: "am", countries: ["Ethiopia"] },
-  {
-    lang: "Arabic",
-    code: "ar",
-    countries: ["Arab League countries", "Israel", "Malta"],
-  },
-  { lang: "Armenian", code: "hy", countries: ["Armenia"] },
-  { lang: "Assamese", code: "as", countries: ["India"] },
-  { lang: "Azerbaijani", code: "az", countries: ["Azerbaijan"] },
-  { lang: "Bangla", code: "bn", countries: ["Bangladesh", "India"] },
-  { lang: "Bashkir", code: "ba", countries: ["Russia"] },
-  {
-    lang: "Basque",
-    code: "eu",
-    countries: ["Basque Country (Spain)", "France"],
-  },
-  {
-    lang: "Bosnian",
-    code: "bs",
-    countries: ["Bosnia and Herzegovina", "Croatia", "Montenegro", "Serbia"],
-  },
-  { lang: "Bulgarian", code: "bg", countries: ["Bulgaria"] },
-  { lang: "Cantonese (Traditional)", code: "yue", countries: ["Hong Kong"] },
-  { lang: "Catalan", code: "ca", countries: ["Catalonia (Spain)", "Andorra"] },
-  { lang: "Chinese (Literary)", code: "lzh", countries: ["China"] },
-  {
-    lang: "Chinese Simplified",
-    code: "zh-Hans",
-    countries: ["China", "Singapore", "Malaysia"],
-  },
-  {
-    lang: "Chinese Traditional",
-    code: "zh-Hant",
-    countries: ["Taiwan", "Hong Kong", "Macau"],
-  },
-  {
-    lang: "Croatian",
-    code: "hr",
-    countries: ["Croatia", "Bosnia and Herzegovina", "Serbia"],
-  },
-  { lang: "Czech", code: "cs", countries: ["Czech Republic"] },
-  {
-    lang: "Danish",
-    code: "da",
-    countries: ["Denmark", "Faroe Islands", "Greenland"],
-  },
-  { lang: "Dari", code: "prs", countries: ["Afghanistan"] },
-  { lang: "Divehi", code: "dv", countries: ["Maldives"] },
-  {
-    lang: "Dutch",
-    code: "nl",
-    countries: ["Netherlands", "Belgium", "Suriname"],
-  },
-  {
-    lang: "English",
-    code: "en",
-    countries: [
-      "United Kingdom",
-      "United States",
-      "Canada",
-      "Australia",
-      "New Zealand",
-      "India",
-      "South Africa",
-      "Ireland",
-    ],
-  },
-  { lang: "Estonian", code: "et", countries: ["Estonia"] },
-  { lang: "Faroese", code: "fo", countries: ["Faroe Islands", "Denmark"] },
-  { lang: "Fijian", code: "fj", countries: ["Fiji"] },
-  { lang: "Filipino", code: "fil", countries: ["Philippines"] },
-  { lang: "Finnish", code: "fi", countries: ["Finland"] },
-  {
-    lang: "French",
-    code: "fr",
-    countries: [
-      "France",
-      "Canada",
-      "Belgium",
-      "Switzerland",
-      "Luxembourg",
-      "Monaco",
-    ],
-  },
-  { lang: "French (Canada)", code: "fr-CA", countries: ["Canada"] },
-  { lang: "Galician", code: "gl", countries: ["Galicia (Spain)"] },
-  { lang: "Ganda", code: "lug", countries: ["Uganda"] },
-  { lang: "Georgian", code: "ka", countries: ["Georgia"] },
-  {
-    lang: "German",
-    code: "de",
-    countries: [
-      "Germany",
-      "Austria",
-      "Switzerland",
-      "Luxembourg",
-      "Liechtenstein",
-    ],
-  },
-  { lang: "Greek", code: "el", countries: ["Greece", "Cyprus"] },
-  { lang: "Gujarati", code: "gu", countries: ["India"] },
-  { lang: "Haitian Creole", code: "ht", countries: ["Haiti"] },
-  { lang: "Hausa", code: "ha", countries: ["Nigeria", "Niger"] },
-  { lang: "Hebrew", code: "he", countries: ["Israel"] },
-  {
-    lang: "Hindi",
-    code: "hi",
-    countries: ["India", "Fiji", "Trinidad and Tobago"],
-  },
-  {
-    lang: "Hmong Daw",
-    code: "mww",
-    countries: ["China", "Vietnam", "Thailand", "Laos"],
-  },
-  { lang: "Hungarian", code: "hu", countries: ["Hungary"] },
-  { lang: "Icelandic", code: "is", countries: ["Iceland"] },
-  { lang: "Igbo", code: "ig", countries: ["Nigeria"] },
-  { lang: "Indonesian", code: "id", countries: ["Indonesia"] },
-  { lang: "Inuinnaqtun", code: "ikt", countries: ["Canada"] },
-  { lang: "Inuktitut", code: "iu", countries: ["Canada"] },
-  { lang: "Inuktitut (Latin)", code: "iu-Latn", countries: ["Canada"] },
-  { lang: "Irish", code: "ga", countries: ["Ireland"] },
-  {
-    lang: "Italian",
-    code: "it",
-    countries: ["Italy", "Switzerland", "San Marino", "Vatican City"],
-  },
-  { lang: "Japanese", code: "ja", countries: ["Japan"] },
-  { lang: "Kannada", code: "kn", countries: ["India"] },
-  { lang: "Kazakh", code: "kk", countries: ["Kazakhstan"] },
-  { lang: "Khmer", code: "km", countries: ["Cambodia"] },
-  {
-    lang: "Kinyarwanda",
-    code: "rw",
-    countries: ["Rwanda", "Uganda", "Democratic Republic of the Congo"],
-  },
-  { lang: "Klingon (Latin)", code: "tlh-Latn", countries: ["Kronos"] },
-  { lang: "Konkani", code: "gom", countries: ["India"] },
-  { lang: "Korean", code: "ko", countries: ["South Korea", "North Korea"] },
-  {
-    lang: "Kurdish (Central)",
-    code: "ku",
-    countries: ["Kurdistan Region (Iraq)", "Turkey", "Syria", "Iran"],
-  },
-  {
-    lang: "Kurdish (Northern)",
-    code: "kmr",
-    countries: ["Turkey", "Syria", "Iran", "Iraq"],
-  },
-  { lang: "Kyrgyz", code: "ky", countries: ["Kyrgyzstan"] },
-  { lang: "Lao", code: "lo", countries: ["Laos"] },
-  { lang: "Latvian", code: "lv", countries: ["Latvia"] },
-  {
-    lang: "Lingala",
-    code: "ln",
-    countries: [
-      "Democratic Republic of the Congo",
-      "Republic of the Congo",
-      "Central African Republic",
-    ],
-  },
-  { lang: "Lithuanian", code: "lt", countries: ["Lithuania"] },
-  { lang: "Lower Sorbian", code: "dsb", countries: ["Germany"] },
-  { lang: "Macedonian", code: "mk", countries: ["North Macedonia"] },
-  { lang: "Maithili", code: "mai", countries: ["India"] },
-  { lang: "Malagasy", code: "mg", countries: ["Madagascar"] },
-  {
-    lang: "Malay",
-    code: "ms",
-    countries: ["Malaysia", "Brunei", "Singapore", "Indonesia"],
-  },
-  { lang: "Malayalam", code: "ml", countries: ["India"] },
-  { lang: "Maltese", code: "mt", countries: ["Malta"] },
-  { lang: "Marathi", code: "mr", countries: ["India"] },
-  { lang: "Mongolian (Cyrillic)", code: "mn-Cyrl", countries: ["Mongolia"] },
-  {
-    lang: "Mongolian (Traditional)",
-    code: "mn-Mong",
-    countries: ["Inner Mongolia (China)", "Mongolia"],
-  },
-  { lang: "Myanmar (Burmese)", code: "my", countries: ["Myanmar (Burma)"] },
-  { lang: "Māori", code: "mi", countries: ["New Zealand"] },
-  { lang: "Nepali", code: "ne", countries: ["Nepal"] },
-  { lang: "Norwegian", code: "nb", countries: ["Norway"] },
-  {
-    lang: "Nyanja",
-    code: "nya",
-    countries: ["Malawi", "Zambia", "Mozambique"],
-  },
-  { lang: "Odia", code: "or", countries: ["India"] },
-  { lang: "Pashto", code: "ps", countries: ["Afghanistan", "Pakistan"] },
-  {
-    lang: "Persian",
-    code: "fa",
-    countries: ["Iran", "Afghanistan", "Tajikistan"],
-  },
-  { lang: "Polish", code: "pl", countries: ["Poland"] },
-  {
-    lang: "Portuguese (Brazil)",
-    code: "pt",
-    countries: [
-      "Brazil",
-      "Portugal",
-      "Mozambique",
-      "Angola",
-      "Guinea-Bissau",
-      "East Timor",
-      "Equatorial Guinea",
-      "Macau",
-    ],
-  },
-  { lang: "Portuguese (Portugal)", code: "pt-PT", countries: ["Portugal"] },
-  { lang: "Punjabi", code: "pa", countries: ["India", "Pakistan"] },
-  { lang: "Querétaro Otomi", code: "otq", countries: ["Mexico"] },
-  { lang: "Romanian", code: "ro", countries: ["Romania", "Moldova"] },
-  {
-    lang: "Rundi",
-    code: "run",
-    countries: ["Burundi", "Democratic Republic of the Congo"],
-  },
-  {
-    lang: "Russian",
-    code: "ru",
-    countries: ["Russia", "Kazakhstan", "Belarus", "Kyrgyzstan"],
-  },
-  { lang: "Samoan", code: "sm", countries: ["Samoa", "American Samoa"] },
-  {
-    lang: "Serbian (Cyrillic)",
-    code: "sr-Cyrl",
-    countries: ["Serbia", "Bosnia and Herzegovina", "Montenegro"],
-  },
-  {
-    lang: "Serbian (Latin)",
-    code: "sr-Latn",
-    countries: ["Serbia", "Bosnia and Herzegovina", "Montenegro"],
-  },
-  { lang: "Sesotho", code: "st", countries: ["Lesotho", "South Africa"] },
-  { lang: "Sesotho sa Leboa", code: "nso", countries: ["South Africa"] },
-  { lang: "Setswana", code: "tn", countries: ["Botswana", "South Africa"] },
-  {
-    lang: "Shona",
-    code: "sn",
-    countries: ["Zimbabwe", "Mozambique", "Zambia"],
-  },
-  { lang: "Sindhi", code: "sd", countries: ["Pakistan", "India"] },
-  { lang: "Sinhala", code: "si", countries: ["Sri Lanka"] },
-  { lang: "Slovak", code: "sk", countries: ["Slovakia"] },
-  { lang: "Slovenian", code: "sl", countries: ["Slovenia"] },
-  {
-    lang: "Somali",
-    code: "so",
-    countries: ["Somalia", "Djibouti", "Ethiopia", "Kenya"],
-  },
-  {
-    lang: "Spanish",
-    code: "es",
-    countries: [
-      "Spain",
-      "Mexico",
-      "Argentina",
-      "Colombia",
-      "Peru",
-      "Venezuela",
-      "Chile",
-      "Ecuador",
-      "Guatemala",
-      "Cuba",
-      "Dominican Republic",
-      "Honduras",
-      "Paraguay",
-      "El Salvador",
-      "Nicaragua",
-      "Costa Rica",
-      "Puerto Rico",
-      "Panama",
-      "Equatorial Guinea",
-      "Western Sahara",
-      "Andorra",
-      "Bolivia",
-    ],
-  },
-  {
-    lang: "Swahili",
-    code: "sw",
-    countries: [
-      "Tanzania",
-      "Kenya",
-      "Uganda",
-      "Rwanda",
-      "Burundi",
-      "Democratic Republic of the Congo",
-    ],
-  },
-  { lang: "Swedish", code: "sv", countries: ["Sweden", "Finland"] },
-  { lang: "Tahitian", code: "ty", countries: ["French Polynesia"] },
-  {
-    lang: "Tamil",
-    code: "ta",
-    countries: ["India", "Sri Lanka", "Singapore", "Malaysia"],
-  },
-  {
-    lang: "Tatar",
-    code: "tt",
-    countries: ["Russia", "Tatarstan (Russia)", "Kazakhstan"],
-  },
-  { lang: "Telugu", code: "te", countries: ["India"] },
-  { lang: "Thai", code: "th", countries: ["Thailand"] },
-  {
-    lang: "Tibetan",
-    code: "bo",
-    countries: ["Tibet (China)", "India", "Nepal"],
-  },
-  { lang: "Tigrinya", code: "ti", countries: ["Eritrea", "Ethiopia"] },
-  { lang: "Tongan", code: "to", countries: ["Tonga"] },
-  { lang: "Turkish", code: "tr", countries: ["Turkey", "Cyprus"] },
-  { lang: "Turkmen", code: "tk", countries: ["Turkmenistan"] },
-  { lang: "Ukrainian", code: "uk", countries: ["Ukraine"] },
-  { lang: "Upper Sorbian", code: "hsb", countries: ["Germany"] },
-  { lang: "Urdu", code: "ur", countries: ["Pakistan", "India"] },
-  {
-    lang: "Uyghur",
-    code: "ug",
-    countries: [
-      "China",
-      "Kazakhstan",
-      "Kyrgyzstan",
-      "Uzbekistan",
-      "Turkey",
-      "Afghanistan",
-    ],
-  },
-  {
-    lang: "Uzbek (Latin)",
-    code: "uz",
-    countries: ["Uzbekistan", "Kazakhstan", "Kyrgyzstan", "Afghanistan"],
-  },
-  { lang: "Vietnamese", code: "vi", countries: ["Vietnam"] },
-  { lang: "Welsh", code: "cy", countries: ["Wales (United Kingdom)"] },
-  { lang: "Xhosa", code: "xh", countries: ["South Africa"] },
-  { lang: "Yoruba", code: "yo", countries: ["Nigeria", "Benin", "Togo"] },
-  { lang: "Yucatec Maya", code: "yua", countries: ["Mexico"] },
-  { lang: "Zulu", code: "zu", countries: ["South Africa"] },
-];
+const Reverso: { [key: string]: string } = {
+  ["ar"]: "ara",
+  ["zh"]: "chi",
+  ["cs"]: "cze",
+  ["da"]: "dan",
+  ["nl"]: "dut",
+  ["en"]: "eng",
+  ["fr"]: "fra",
+  ["de"]: "ger",
+  ["el"]: "gre",
+  ["he"]: "heb",
+  ["hi"]: "hin",
+  ["hu"]: "hun",
+  ["it"]: "ita",
+  ["ja"]: "jpn",
+  ["ko"]: "kor",
+  ["fa"]: "per",
+  ["pl"]: "pol",
+  ["pt"]: "por",
+  ["ro"]: "rum",
+  ["ru"]: "rus",
+  ["sk"]: "slo",
+  ["es"]: "spa",
+  ["sv"]: "swe",
+  ["th"]: "tha",
+  ["tr"]: "tur",
+  ["uk"]: "ukr",
+};
+const ReversoContext: { [key: string]: string } = {
+  ["ar"]: "arabic",
+  ["cs"]: "czech",
+  ["da"]: "danish",
+  ["de"]: "german",
+  ["el"]: "greek",
+  ["en"]: "english",
+  ["es"]: "spanish",
+  ["fa"]: "persian",
+  ["fr"]: "french",
+  ["he"]: "hebrew",
+  ["hi"]: "hindi",
+  ["hu"]: "hungarian",
+  ["it"]: "italian",
+  ["ja"]: "japanese",
+  ["ko"]: "korean",
+  ["nl"]: "dutch",
+  ["pl"]: "polish",
+  ["pt"]: "portuguese",
+  ["ro"]: "romanian",
+  ["ru"]: "russian",
+  ["sk"]: "slovak",
+  ["sv"]: "swedish",
+  ["th"]: "thai",
+  ["tr"]: "turkish",
+  ["uk"]: "ukrainian",
+  ["zh"]: "chinese",
+};
+const MobileIframe = ({ from, to, text, translator }: MobileIframeProps) => {
+  const translators = (
+    from: string,
+    to: string,
+    text: string,
+  ): { [key: string]: string } => {
+    const encodeFrom = encodeURIComponent(from);
+    const encodeTo = encodeURIComponent(to);
+    const encodeText = encodeURIComponent(text);
+    return {
+      ["bing"]: `https://www.bing.com/translator?from=${encodeFrom}&to=${encodeTo}&text=${encodeText}`,
+      ["deepl"]: `https://www.deepl.com/en/translator#${encodeFrom}/${encodeTo}/${encodeText}`,
+      ["google"]: `https://translate.google.com/?from=${encodeFrom}&to=${encodeTo}&text=${encodeText}`,
+      ["yandex"]: `https://translate.yandex.com/en/?source_lang=${encodeFrom}&target_lang=${encodeTo}&text=${encodeText}`,
+      ["linguee"]: `https://www.linguee.com/${
+        Linguee[encodeFrom] || "english"
+      }-${
+        Linguee[encodeTo] || "english"
+      }/search?source=auto&query=${encodeText}`,
+      ["reverso"]: `https://www.reverso.net/text-translation#sl=${
+        Reverso[encodeFrom] || "eng"
+      }&tl=${Reverso[encodeTo] || "eng"}&text=${encodeText}`,
+      ["context"]: `https://context.reverso.net/translation/${
+        ReversoContext[encodeFrom] || "english"
+      }-${ReversoContext[encodeTo] || "english"}/${encodeText}`,
+    };
+  };
 
-const MobileIframe = ({ url }: MobileIframeProps) => {
-  // Set the user agent of the iframe to mobile
-
-  // Render the iframe
   return (
-    <iframe
-      src={url}
-      seamless
-      title="Mobile Iframe"
-      className="flex h-96 w-full rounded-2xl "
-    />
+    <>
+      <Link
+        href={translators(from, to, text)[translator]}
+        className="pb-2 hover:text-blue-500"
+        target="_blank"
+      >
+        Open on {translator.charAt(0).toUpperCase() + translator.slice(1)}
+      </Link>
+      <iframe
+        src={translators(from, to, text)[translator]}
+        seamless
+        title="Translator"
+        className="flex h-96 w-full rounded-2xl "
+      />
+    </>
   );
 };
 

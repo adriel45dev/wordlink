@@ -5,11 +5,9 @@ import AlertType from "@/app/shared/enums/alert-type.enums";
 import AlertDataType from "@/app/shared/types/alert-data.types";
 import EyeClosedIcon from "@/public/icons/EyeClosedIcon";
 import EyeOpenIcon from "@/public/icons/EyeOpenIcon";
-import { useContext, useState } from "react";
-const md5 = require("md5");
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserContext } from "@/app/context/UserContext";
-import { UserLogginContext } from "@/app/context/UserLoggingContext";
+const md5 = require("md5");
 
 export default function Login() {
   const [AlertData, setAlertData] = useState<AlertDataType>({
@@ -23,7 +21,6 @@ export default function Login() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const { setIsUser } = useContext(UserLogginContext);
 
   const router = useRouter();
   const getUsers = async () => {
@@ -97,7 +94,6 @@ export default function Login() {
       display: true,
     });
 
-    setIsUser(true);
     return router.push("/collection/library");
   };
 

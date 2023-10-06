@@ -17,9 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col">
-        <UserContextProvider>
-          <UserLogginProvider>{children}</UserLogginProvider>
-        </UserContextProvider>
+        <UserContextProvider>{children}</UserContextProvider>
       </body>
     </html>
   );
