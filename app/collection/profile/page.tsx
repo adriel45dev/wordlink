@@ -69,16 +69,16 @@ export default function Profile() {
         </div>{" "}
         <div className="mt-12 flex flex-col justify-center">
           {" "}
-          <div className=" flex w-full cursor-pointer flex-col gap-2 px-4">
+          <div className="flex w-full cursor-pointer flex-col gap-2 px-4">
             {user &&
               Object.keys(user.languages).map((language_key, key) => {
                 const { name, country, code } = user.languages[language_key];
                 return (
                   <div
                     key={key}
-                    className="flex flex-wrap items-center justify-between rounded-2xl bg-gray-700 p-4"
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border bg-gray-700 p-4 hover:border-gray-500 hover:bg-gray-800"
                   >
-                    <div className="group flex flex-row gap-2">
+                    <div className="group flex flex-row flex-wrap gap-2">
                       <Image
                         src={`/images/flags/${country}.svg`}
                         width={200}
@@ -95,8 +95,12 @@ export default function Profile() {
                         edit ? "opacity-100" : "opacity-0"
                       }`}
                     >
-                      <button className="text-sm text-red-400">Delete</button>
-                      <button className="text-sm text-blue-400">Reset</button>
+                      <button className="text-sm text-red-400 hover:text-red-500">
+                        Delete
+                      </button>
+                      <button className="text-sm text-blue-400 hover:text-blue-500">
+                        Reset
+                      </button>
                     </div>
                   </div>
                 );
